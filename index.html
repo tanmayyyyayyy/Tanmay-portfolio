@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tanmay Jain — AI Engineer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<script>
+  // GLOBAL MOTION CONTROLLER
+  window.Motion = {
+    lerp: (a, b, n) => (1 - n) * a + n * b,
+    ease: 0.08
+  };
+</script>
+
+  <!-- ===== LOADER ===== -->
+  <div id="loader">
+    <div class="loader-inner">
+      <div class="loader-letters">
+        <span>T</span><span>A</span><span>N</span><span>M</span><span>A</span><span class="filled">Y</span>
+      </div>
+      <div class="loader-bar-wrap"><div class="loader-bar" id="loaderBar"></div></div>
+      <div class="loader-pct" id="loaderPct">0%</div>
+    </div>
+  </div>
+
+  <!-- ===== CURSOR ===== -->
+  <div class="cursor-dot" id="cursorDot"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <div class="cursor-label" id="cursorLabel"></div>
+
+  <!-- ===== SCROLL PROGRESS ===== -->
+  <div class="progress-line" id="progressLine"></div>
+
+  <!-- ===== NOISE ===== -->
+  <div class="noise" aria-hidden="true"></div>
+
+  <!-- ===== SPOTLIGHT ===== -->
+  <div class="spotlight" id="spotlight" aria-hidden="true"></div>
+
+  <!-- ===== NAV ===== -->
+  <nav class="nav" id="navbar">
+    <div class="nav-inner">
+      <a href="#home" class="nav-logo magnetic">
+        T<span class="logo-accent">.</span>
+      </a>
+      <div class="nav-links" id="navLinks">
+        <a href="#about"      class="nav-link" data-num="01">About</a>
+        <a href="#skills"     class="nav-link" data-num="02">Skills</a>
+        <a href="#projects"   class="nav-link" data-num="03">Projects</a>
+        <a href="#experience" class="nav-link" data-num="04">Experience</a>
+        <a href="#contact"    class="nav-link" data-num="05">Contact</a>
+      </div>
+      <a href="mailto:tanmayj209@gmail.com" class="nav-hire magnetic">
+        <span>Hire Me</span>
+      </a>
+      <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+        <span></span><span></span>
+      </button>
+    </div>
+    <div class="mobile-menu" id="mobileMenu">
+      <a href="#about"      class="mob-link">About</a>
+      <a href="#skills"     class="mob-link">Skills</a>
+      <a href="#projects"   class="mob-link">Projects</a>
+      <a href="#experience" class="mob-link">Experience</a>
+      <a href="#contact"    class="mob-link">Contact</a>
+    </div>
+  </nav>
+
+  <!-- ===== HERO ===== -->
+  <section class="hero" id="home">
+    <canvas id="heroCanvas"></canvas>
+    <!-- AI ORB (Signature Interaction) -->
+    <div class="ai-orb" id="aiOrb"></div>
+
+    <!-- Multi-layer parallax depth -->
+    <div class="hero-layer hero-layer-back" data-depth="0.1" aria-hidden="true">
+      <div class="neural-grid" id="neuralGrid"></div>
+    </div>
+    <div class="hero-layer hero-layer-mid" data-depth="0.05" aria-hidden="true"></div>
+
+    <div class="hero-inner">
+      <div class="hero-eyebrow reveal-cinematic" data-delay="0">
+        <span class="pulse-dot"></span>
+        <span class="eyebrow-text">Available · Jaipur, India · AI Engineer</span>
+      </div>
+
+      <h1 class="hero-title">
+        <span class="hero-title-line">
+          <span class="line-reveal" data-delay="0.1">TANMAY</span>
+        </span>
+        <span class="hero-title-line">
+          <span class="line-reveal italic-gold" data-delay="0.2">Jain</span>
+        </span>
+      </h1>
+
+      <div class="hero-role reveal-cinematic" data-delay="0.5">
+        <span class="role-prefix">→</span>
+        <span id="typingText" class="role-type"></span>
+        <span class="role-cursor">_</span>
+      </div>
+
+      <p class="hero-bio reveal-cinematic" data-delay="0.6">
+        I build <em>intelligent, scalable applications</em> at the intersection<br>
+        of AI and elegant engineering.
+      </p>
+
+      <div class="hero-cta reveal-cinematic" data-delay="0.7">
+        <a href="#projects" class="btn-main magnetic">
+          <span>View Work</span>
+          <i class="fas fa-arrow-right"></i>
+        </a>
+        <a href="https://github.com/tanmayyyyayyy" target="_blank" class="btn-outline magnetic">
+          <i class="fab fa-github"></i>
+          <span>GitHub</span>
+        </a>
+      </div>
+
+      <div class="hero-stats reveal-cinematic" data-delay="0.85">
+        <div class="hstat">
+          <div class="hstat-num" data-count="3">0<sub>+</sub></div>
+          <div class="hstat-label">Projects</div>
+        </div>
+        <div class="hstat-divider"></div>
+        <div class="hstat">
+          <div class="hstat-num" data-count="2">0<sub>+</sub></div>
+          <div class="hstat-label">Leadership</div>
+        </div>
+        <div class="hstat-divider"></div>
+        <div class="hstat">
+          <div class="hstat-num" data-count="4">0<sub>+</sub></div>
+          <div class="hstat-label">Certifications</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-scroll-hint">
+      <div class="scroll-mouse"><div class="scroll-wheel"></div></div>
+      <span class="scroll-text">Scroll</span>
+    </div>
+
+    <div class="hero-stamp" aria-hidden="true">AI</div>
+  </section>
+
+  <!-- ===== MARQUEE ===== -->
+  <div class="marquee-wrap" aria-hidden="true">
+    <div class="marquee-track">
+      <span class="marquee-item"><span class="dot"></span> Python <span class="hl">·</span></span>
+      <span class="marquee-item"><span class="dot"></span> Machine Learning <span class="hl">·</span></span>
+      <span class="marquee-item"><span class="dot"></span> Full Stack Dev <span class="hl">·</span></span>
+      <span class="marquee-item"><span class="dot"></span> Open Source <span class="hl">·</span></span>
+      <span class="marquee-item"><span class="dot"></span> AI Engineering <span class="hl">·</span></span>
+      <span class="marquee-item"><span class="dot"></span> Node.js <span class="hl">·</span></span>
+      <span class="marquee-item"><span class="dot"></span> MongoDB <span class="hl">·</span></span>
+      <span class="marquee-item"><span class="dot"></span> Scikit-learn <span class="hl">·</span></span>
+      <!-- Duplicate for seamless loop -->
+      <span class="marquee-item"><span class="dot"></span> Python <span class="hl">·</span></span>
+      <span class="marquee-item"><span class="dot"></span> Machine Learning <span class="hl">·</span></span>
+      <span class="marquee-item"><span class="dot"></span> Full Stack Dev <span class="hl">·</span></span>
+      <span class="marquee-item"><span class="dot"></span> Open Source <span class="hl">·</span></span>
+      <span class="marquee-item"><span class="dot"></span> AI Engineering <span class="hl">·</span></span>
+      <span class="marquee-item"><span class="dot"></span> Node.js <span class="hl">·</span></span>
+      <span class="marquee-item"><span class="dot"></span> MongoDB <span class="hl">·</span></span>
+      <span class="marquee-item"><span class="dot"></span> Scikit-learn <span class="hl">·</span></span>
+    </div>
+  </div>
+
+  <!-- ===== ABOUT ===== -->
+  <section class="section about" id="about">
+    <div class="container">
+      <div class="section-eyebrow reveal-up">
+        <span class="ey-num">01</span>
+        <span class="ey-line"></span>
+        <span class="ey-text">Who I Am</span>
+      </div>
+
+      <div class="about-grid">
+      <div class="about-left">
+        <h2 class="section-title">
+          Crafting the<br><span class="gold-text">future of AI</span><br>one product<br>at a time.
+        </h2>
+        <blockquote class="about-quote reveal-up" data-delay="0.1">
+          "Build things that matter."
+        </blockquote>
+        </div>
+
+        <div class="about-right">
+          <p class="about-text reveal-up" data-delay="0.1">
+            I'm a <strong>3rd Year B.Tech CSE (AI-ML)</strong> student at JECRC University, Jaipur — driven by a deep fascination with how machines can learn, reason, and build solutions that matter.
+          </p>
+          <p class="about-text reveal-up" data-delay="0.2">
+            My work lives at the intersection of <strong>artificial intelligence and full-stack development</strong>. From healthcare dashboards to smart travel planners, I build products that solve real problems with elegant engineering.
+          </p>
+          <p class="about-text reveal-up" data-delay="0.3">
+            Beyond code, I lead communities — as an Outreach Intern at JECRC's T&P Office and State Lead at Open Source Connect India.
+          </p>
+
+          <div class="about-meta reveal-up" data-delay="0.4">
+            <div class="meta-item">
+              <div class="meta-key">Location</div>
+              <div class="meta-val">Jaipur, Rajasthan</div>
+            </div>
+            <div class="meta-item">
+              <div class="meta-key">Degree</div>
+              <div class="meta-val">B.Tech CSE (AI-ML)</div>
+            </div>
+            <div class="meta-item">
+              <div class="meta-key">Focus</div>
+              <div class="meta-val">AI Engineering</div>
+            </div>
+            <div class="meta-item">
+              <div class="meta-key">Status</div>
+              <div class="meta-val status-badge"><span class="status-dot"></span> Open to Work</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Terminal -->
+      <div class="terminal reveal-up" data-delay="0.2">
+        <div class="terminal-bar">
+          <span class="t-dot r"></span><span class="t-dot y"></span><span class="t-dot g"></span>
+          <span class="terminal-tab">tanmay.py</span>
+        </div>
+        <div class="terminal-body">
+          <span class="t-comment"># The human behind the code</span><br>
+          <span class="t-kw">class</span> <span class="t-cls">Tanmay</span>:<br>
+          &nbsp;&nbsp;<span class="t-kw">def</span> <span class="t-fn">__init__</span>(self):<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;self.<span class="t-prop">role</span>&nbsp;&nbsp;&nbsp;&nbsp; = <span class="t-str">"AI Engineer"</span><br>
+          &nbsp;&nbsp;&nbsp;&nbsp;self.<span class="t-prop">passion</span>&nbsp;&nbsp;= <span class="t-str">"Building AI Products"</span><br>
+          &nbsp;&nbsp;&nbsp;&nbsp;self.<span class="t-prop">location</span> = <span class="t-str">"Jaipur, India"</span><br>
+          <br>
+          &nbsp;&nbsp;<span class="t-kw">def</span> <span class="t-fn">skills</span>(self):<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;<span class="t-kw">return</span> [<span class="t-str">"ML/AI"</span>, <span class="t-str">"Python"</span>, <span class="t-str">"Full Stack"</span>, <span class="t-str">"Open Source"</span>]<br>
+          <br>
+          &nbsp;&nbsp;<span class="t-kw">def</span> <span class="t-fn">coffee_per_day</span>(self) <span class="t-op">-></span> <span class="t-cls">int</span>:<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;<span class="t-kw">return</span> <span class="t-num">3</span>&nbsp;&nbsp;<span class="t-comment"># at minimum</span><br>
+          <span class="terminal-cursor"></span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SKILLS ===== -->
+  <section class="section skills" id="skills">
+    <div class="container">
+      <div class="section-eyebrow reveal-up">
+        <span class="ey-num">02</span>
+        <span class="ey-line"></span>
+        <span class="ey-text">Toolkit</span>
+      </div>
+      <h2 class="section-title">Technical <span class="gold-text">Arsenal</span></h2>
+
+      <div class="skills-grid">
+        <div class="skill-panel reveal-up" data-delay="0">
+          <div class="skill-panel-icon"><i class="fas fa-brain"></i></div>
+          <h3>AI / Machine Learning</h3>
+          <div class="skill-bars">
+            <div class="skill-row"><span class="sk-name">Python</span><div class="sk-track"><div class="sk-fill" style="--p:90%"></div></div><span class="sk-pct">90%</span></div>
+            <div class="skill-row"><span class="sk-name">NumPy & Pandas</span><div class="sk-track"><div class="sk-fill" style="--p:85%"></div></div><span class="sk-pct">85%</span></div>
+            <div class="skill-row"><span class="sk-name">Scikit-learn</span><div class="sk-track"><div class="sk-fill" style="--p:75%"></div></div><span class="sk-pct">75%</span></div>
+            <div class="skill-row"><span class="sk-name">Data Engineering</span><div class="sk-track"><div class="sk-fill" style="--p:80%"></div></div><span class="sk-pct">80%</span></div>
+            <div class="skill-row"><span class="sk-name">ML Model Building</span><div class="sk-track"><div class="sk-fill" style="--p:70%"></div></div><span class="sk-pct">70%</span></div>
+          </div>
+        </div>
+
+        <div class="skill-panel reveal-up" data-delay="0.1">
+          <div class="skill-panel-icon"><i class="fas fa-layer-group"></i></div>
+          <h3>Full Stack Dev</h3>
+          <div class="skill-bars">
+            <div class="skill-row"><span class="sk-name">HTML & CSS</span><div class="sk-track"><div class="sk-fill" style="--p:95%"></div></div><span class="sk-pct">95%</span></div>
+            <div class="skill-row"><span class="sk-name">JavaScript</span><div class="sk-track"><div class="sk-fill" style="--p:85%"></div></div><span class="sk-pct">85%</span></div>
+            <div class="skill-row"><span class="sk-name">Node.js & Express</span><div class="sk-track"><div class="sk-fill" style="--p:75%"></div></div><span class="sk-pct">75%</span></div>
+            <div class="skill-row"><span class="sk-name">MongoDB</span><div class="sk-track"><div class="sk-fill" style="--p:70%"></div></div><span class="sk-pct">70%</span></div>
+          </div>
+        </div>
+
+        <div class="skill-panel reveal-up" data-delay="0.2">
+          <div class="skill-panel-icon"><i class="fas fa-tools"></i></div>
+          <h3>Tools & Workflow</h3>
+          <div class="skill-bars">
+            <div class="skill-row"><span class="sk-name">Git & GitHub</span><div class="sk-track"><div class="sk-fill" style="--p:90%"></div></div><span class="sk-pct">90%</span></div>
+            <div class="skill-row"><span class="sk-name">VS Code</span><div class="sk-track"><div class="sk-fill" style="--p:95%"></div></div><span class="sk-pct">95%</span></div>
+            <div class="skill-row"><span class="sk-name">Figma</span><div class="sk-track"><div class="sk-fill" style="--p:65%"></div></div><span class="sk-pct">65%</span></div>
+            <div class="skill-row"><span class="sk-name">REST APIs</span><div class="sk-track"><div class="sk-fill" style="--p:82%"></div></div><span class="sk-pct">82%</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tech-cloud reveal-up" data-delay="0.3">
+        <span class="tech-chip">Python</span>
+        <span class="tech-chip">TensorFlow</span>
+        <span class="tech-chip">Scikit-learn</span>
+        <span class="tech-chip">Node.js</span>
+        <span class="tech-chip">MongoDB</span>
+        <span class="tech-chip">Git</span>
+        <span class="tech-chip">REST API</span>
+        <span class="tech-chip">HTML/CSS/JS</span>
+        <span class="tech-chip">Figma</span>
+        <span class="tech-chip">NumPy</span>
+        <span class="tech-chip">Pandas</span>
+        <span class="tech-chip">Express</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== PROJECTS ===== -->
+  <section class="section projects" id="projects">
+    <div class="container">
+      <div class="section-eyebrow reveal-up">
+        <span class="ey-num">03</span>
+        <span class="ey-line"></span>
+        <span class="ey-text">Selected Work</span>
+      </div>
+      <h2 class="section-title">Featured <span class="gold-text">Projects</span></h2>
+    </div>
+
+    <div class="project-list">
+
+      <div class="project-row reveal-up" data-delay="0" data-project="0">
+        <div class="proj-num">01</div>
+        <div class="proj-body">
+          <div class="proj-tags">
+            <span class="proj-tag feat">Featured</span>
+            <span class="proj-tag">Healthcare</span>
+          </div>
+          <h3 class="proj-title">CareVerse</h3>
+          <p class="proj-desc">AI-powered healthcare dashboard designed for real-world clinical workflows. Patient analytics, appointment management, and predictive health insights built for scale.</p>
+          <div class="proj-stack">
+            <span>HTML/CSS/JS</span><span>Node.js</span><span>MongoDB</span>
+          </div>
+          <div class="proj-links">
+            <a href="#" class="proj-link"><i class="fas fa-arrow-up-right-from-square"></i> Live Demo</a>
+            <a href="https://github.com/tanmayyyyayyy/Care-Verse" target="_blank" class="proj-link"><i class="fab fa-github"></i> Source</a>
+          </div>
+        </div>
+        <div class="proj-visual">
+          <div class="proj-art">
+            <div class="proj-ring"></div>
+            <div class="proj-ring"></div>
+            <div class="proj-ring"></div>
+            <span class="proj-art-icon"><i class="fas fa-heart-pulse"></i></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-row reveal-up" data-delay="0.1" data-project="1">
+        <div class="proj-num">02</div>
+        <div class="proj-body">
+          <div class="proj-tags">
+            <span class="proj-tag">Productivity</span>
+          </div>
+          <h3 class="proj-title">Loopin</h3>
+          <p class="proj-desc">Coding streak tracker and productivity dashboard with visual analytics. Monitors sessions, manages goals, and generates insightful progress reports for developers.</p>
+          <div class="proj-stack">
+            <span>HTML</span><span>CSS</span><span>JavaScript</span>
+          </div>
+          <div class="proj-links">
+            <a href="#" class="proj-link"><i class="fas fa-arrow-up-right-from-square"></i> Live Demo</a>
+            <a href="https://github.com/tanmayyyyayyy/LoopIn" target="_blank" class="proj-link"><i class="fab fa-github"></i> Source</a>
+          </div>
+        </div>
+        <div class="proj-visual">
+          <div class="proj-bars-art">
+            <span></span><span></span><span></span><span></span><span></span><span></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- <div class="project-row reveal-up" data-delay="0.2" data-project="2">
+        <div class="proj-num">03</div>
+        <div class="proj-body">
+          <div class="proj-tags">
+            <span class="proj-tag">Travel Tech</span>
+          </div>
+          <h3 class="proj-title">TripPal</h3>
+          <p class="proj-desc">Smart travel planner generating personalized itineraries based on budget, duration, and preferences. Structured daily plans and destination insights powered by AI.</p>
+          <div class="proj-stack">
+            <span>HTML/CSS/JS</span><span>Node.js</span><span>MongoDB</span>
+          </div>
+          <div class="proj-links">
+            <a href="#" class="proj-link"><i class="fas fa-arrow-up-right-from-square"></i> Live Demo</a>
+            <a href="https://github.com/tanmayyyyayyy" target="_blank" class="proj-link"><i class="fab fa-github"></i> Source</a>
+          </div>
+        </div>
+        <div class="proj-visual">
+          <div class="proj-orbit-wrap">
+            <div class="proj-orbit-ring"><div class="proj-orbit-dot"></div></div>
+            <span class="proj-orbit-center"><i class="fas fa-plane"></i></span>
+          </div>
+        </div>
+      </div> -->
+
+    </div>
+
+    <div class="container">
+      <div class="projects-more reveal-up">
+        <a href="https://github.com/tanmayyyyayyy" target="_blank" class="btn-outline magnetic">
+          <i class="fab fa-github"></i>
+          <span>View All on GitHub</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== PROJECT MODAL ===== -->
+  <div class="proj-modal" id="projModal" role="dialog" aria-modal="true" aria-label="Project Details">
+    <div class="proj-modal-bg" id="projModalBg"></div>
+    <div class="proj-modal-content" id="projModalContent">
+      <button class="proj-modal-close" id="projModalClose" aria-label="Close">
+        <i class="fas fa-xmark"></i>
+      </button>
+      <div class="proj-modal-body" id="projModalBody"></div>
+    </div>
+  </div>
+
+  <!-- ===== EXPERIENCE ===== -->
+  <section class="section experience" id="experience">
+    <div class="container">
+      <div class="section-eyebrow reveal-up">
+        <span class="ey-num">04</span>
+        <span class="ey-line"></span>
+        <span class="ey-text">Journey</span>
+      </div>
+
+      <div class="exp-grid">
+        <div class="exp-left reveal-up">
+          <h2 class="section-title">Experience &amp;<br><em>Leadership</em></h2>
+          <div class="exp-big-num">04</div>
+        </div>
+
+        <div class="timeline">
+          <div class="tl-entry reveal-up" data-delay="0">
+            <div class="tl-pip"></div>
+            <div class="tl-card">
+              <div class="tl-card-top">
+                <div>
+                  <h3>Outreach Intern</h3>
+                  <span class="tl-org">JECRC University — T&P Office</span>
+                </div>
+                <span class="tl-pill present">Present</span>
+              </div>
+              <p>Driving placement outreach initiatives, connecting students with industry opportunities, and supporting the university's recruitment ecosystem.</p>
+              <div class="tl-chips"><span>Outreach</span><span>Communication</span><span>Networking</span></div>
+            </div>
+          </div>
+
+          <div class="tl-entry reveal-up" data-delay="0.1">
+            <div class="tl-pip"></div>
+            <div class="tl-card">
+              <div class="tl-card-top">
+                <div>
+                  <h3>State Representative</h3>
+                  <span class="tl-org">Open Source Connect India (OSCI)</span>
+                </div>
+                <!-- <span class="tl-pill present">Present</span> -->
+              </div>
+              <p>State Lead responsible for promoting open source culture across Rajasthan. Organizing events, mentoring contributors, and growing the developer ecosystem.</p>
+              <div class="tl-chips"><span>Leadership</span><span>Open Source</span><span>Community</span></div>
+            </div>
+          </div>
+
+          <div class="tl-entry reveal-up" data-delay="0.2">
+            <div class="tl-pip"></div>
+            <div class="tl-card">
+              <div class="tl-card-top">
+                <div>
+                  <h3>Open Source Contributor</h3>
+                  <span class="tl-org">Social Summer of Code (SSoC)</span>
+                </div>
+                <span class="tl-pill done">2025</span>
+              </div>
+              <p>Contributed to real-world open source projects during SSoC, writing production-level code, participating in code reviews, and collaborating with distributed teams globally.</p>
+              <div class="tl-chips"><span>GitHub</span><span>Contributions</span><span>Collaboration</span></div>
+            </div>
+          </div>
+
+          <div class="tl-entry reveal-up" data-delay="0.3">
+            <div class="tl-pip"></div>
+            <div class="tl-card">
+              <div class="tl-card-top">
+                <div>
+                  <h3>Campus Ambassador</h3>
+                  <span class="tl-org">GirlScript Summer of Code</span>
+                </div>
+                <span class="tl-pill done">2024–25</span>
+              </div>
+              <p>Represented GirlScript at JECRC, promoting open source participation, mentoring first-time contributors, and building an inclusive developer community on campus.</p>
+              <div class="tl-chips"><span>Mentoring</span><span>Inclusion</span><span>GSSoC</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CERTIFICATIONS ===== -->
+  <section class="section certs" id="certs">
+    <div class="container">
+      <div class="section-eyebrow reveal-up">
+        <span class="ey-num">05</span>
+        <span class="ey-line"></span>
+        <span class="ey-text">Credentials</span>
+      </div>
+      <h2 class="section-title">Certifications &amp; <span class="gold-text">Courses</span></h2>
+
+      <div class="certs-grid">
+        <div class="cert-card reveal-up" data-delay="0">
+          <div class="cert-icon"><i class="fas fa-chart-bar"></i></div>
+          <div class="cert-verified">Verified</div>
+          <h4>Data Analysis with Python</h4>
+          <span class="cert-by">IBM / Coursera</span>
+        </div>
+        <div class="cert-card reveal-up" data-delay="0.1">
+          <div class="cert-icon"><i class="fas fa-chart-pie"></i></div>
+          <div class="cert-verified">Verified</div>
+          <h4>R Programming</h4>
+          <span class="cert-by">Johns Hopkins / Coursera</span>
+        </div>
+        <div class="cert-card reveal-up" data-delay="0.2">
+          <div class="cert-icon"><i class="fas fa-brain"></i></div>
+          <div class="cert-verified">Verified</div>
+          <h4>AI Foundations</h4>
+          <span class="cert-by">IBM / Cognitive Class</span>
+        </div>
+        <div class="cert-card reveal-up" data-delay="0.3">
+          <div class="cert-icon"><i class="fas fa-wind"></i></div>
+          <div class="cert-verified">Completed</div>
+          <h4>Tailwind CSS Bootcamp</h4>
+          <span class="cert-by">Udemy</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CONTACT ===== -->
+  <section class="section contact" id="contact">
+    <div class="contact-bg-text" aria-hidden="true">CONTACT</div>
+    <div class="container">
+      <div class="section-eyebrow reveal-up">
+        <span class="ey-num">06</span>
+        <span class="ey-line"></span>
+        <span class="ey-text">Let's Talk</span>
+      </div>
+
+      <div class="contact-grid">
+        <div class="contact-left reveal-up">
+          <h2 class="contact-heading">
+            Have a project<br>in mind? <em>Let's<br>build together.</em>
+          </h2>
+          <p class="contact-sub">Whether it's a product idea, a job opportunity, or just want to talk tech — I'm always open to interesting conversations.</p>
+
+          <div class="contact-links">
+            <a href="mailto:tanmayj209@gmail.com" class="c-link">
+              <div class="c-link-ico"><i class="fas fa-envelope"></i></div>
+              <div class="c-link-info">
+                <div class="c-link-label">Email</div>
+                <div class="c-link-val">tanmayj209@gmail.com</div>
+              </div>
+              <i class="fas fa-arrow-right c-link-arrow"></i>
+            </a>
+            <a href="https://www.linkedin.com/in/tanmayyyayyy/" target="_blank" class="c-link">
+              <div class="c-link-ico"><i class="fab fa-linkedin-in"></i></div>
+              <div class="c-link-info">
+                <div class="c-link-label">LinkedIn</div>
+                <div class="c-link-val">in/tanmayyyayyy</div>
+              </div>
+              <i class="fas fa-arrow-right c-link-arrow"></i>
+            </a>
+            <a href="https://github.com/tanmayyyyayyy" target="_blank" class="c-link">
+              <div class="c-link-ico"><i class="fab fa-github"></i></div>
+              <div class="c-link-info">
+                <div class="c-link-label">GitHub</div>
+                <div class="c-link-val">tanmayyyyayyy</div>
+              </div>
+              <i class="fas fa-arrow-right c-link-arrow"></i>
+            </a>
+          </div>
+        </div>
+
+        <div class="contact-right reveal-up" data-delay="0.2">
+          <form class="contact-form" id="contactForm" novalidate>
+            <div class="form-group">
+              <label class="form-label" for="name">Your Name</label>
+              <input class="form-input" type="text" id="name" placeholder="John Doe" autocomplete="name" />
+              <span class="form-err" id="nameErr"></span>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="email">Email Address</label>
+              <input class="form-input" type="email" id="email" placeholder="john@example.com" autocomplete="email" />
+              <span class="form-err" id="emailErr"></span>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="message">Message</label>
+              <textarea class="form-input" id="message" rows="5" placeholder="Hey Tanmay, I'd love to connect about..."></textarea>
+              <span class="form-err" id="messageErr"></span>
+            </div>
+            <button type="submit" class="btn-send magnetic">
+              <span>Send Message</span>
+              <i class="fas fa-paper-plane"></i>
+            </button>
+            <div class="form-success" id="formSuccess">
+              <i class="fas fa-check-circle"></i>
+              Message sent! I'll get back to you soon.
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-brand-group">
+        <div class="footer-brand">Tanmay<span>.</span></div>
+        <div class="footer-copy">© 2026 — All rights reserved</div>
+      </div>
+      <p class="footer-line">Building the future with AI, one line at a time.</p>
+      <div class="footer-socials">
+        <a href="mailto:tanmayj209@gmail.com" class="social-btn magnetic" aria-label="Email"><i class="fas fa-envelope"></i></a>
+        <a href="https://www.linkedin.com/in/tanmayyyayyy/" target="_blank" class="social-btn magnetic" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+        <a href="https://github.com/tanmayyyyayyy" target="_blank" class="social-btn magnetic" aria-label="GitHub"><i class="fab fa-github"></i></a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ===== SCROLL TOP ===== -->
+  <button class="scroll-top" id="scrollTop" aria-label="Back to top">
+    <i class="fas fa-arrow-up"></i>
+  </button>
+
+  <script src="script.js"></script>
+</body>
+</html>
