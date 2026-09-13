@@ -502,11 +502,11 @@ class TypeWriter {
     this.el = qs('#typingText');
     if (!this.el) return;
     this.lines = [
-      'AI Engineer',
-      'ML Enthusiast',
-      'Full Stack Dev',
-      'Open Source Contributor',
-      'Product Builder',
+      '3rd-Year CS Student',
+      'Full-Stack Developer',
+      'AI / ML Enthusiast',
+      'Backend Engineer',
+      'Computer Vision Builder',
     ];
     this.lineIndex = 0;
     this.charIndex = 0;
@@ -597,35 +597,65 @@ class ProjectModal {
 
     this.data = [
       {
-        title: 'CareVerse',
-        org: 'Healthcare AI Platform',
+        title: 'IBVAP',
+        org: 'SIH 2026 • Team Project',
         desc: [
-          'CareVerse is an AI-powered healthcare dashboard engineered for real-world clinical workflows. It features predictive patient analytics, intelligent appointment management, and risk-based health insights.',
-          'Built to scale, the system handles complex data pipelines and delivers actionable insights to medical professionals through an intuitive interface designed around clinical decision-making.',
+          'IBVAP is a collaborative edge-deployable surveillance and threat-intelligence platform for transforming existing CCTV infrastructure into intelligent monitoring nodes. It combines real-time computer vision, tracking, geometric event detection, and dashboard-based tactical monitoring.',
+          'This project handles RTSP and local video feeds, multi-camera processing, object detection, virtual fence logic, loitering detection, anomaly escalation, and operator-facing incident workflows. The implementation emphasizes practical system reliability, not just model outputs.',
         ],
-        stack: ['HTML/CSS', 'JavaScript', 'Node.js', 'MongoDB', 'Express', 'Chart.js'],
-        links: [{ label: 'Live Demo', icon: 'fas fa-arrow-up-right-from-square', href: '#' }, { label: 'GitHub', icon: 'fab fa-github', href: 'https://github.com/tanmayyyyayyy' }],
+        stack: ['Python', 'OpenCV', 'PyTorch', 'YOLOv8', 'ByteTrack', 'FastAPI', 'WebSockets', 'PostgreSQL', 'React', 'TypeScript'],
+        links: [{ label: 'GitHub', icon: 'fab fa-github', href: 'https://github.com/bhoomik-codes/sih-2026-raw' }],
       },
       {
-        title: 'Loopin',
-        org: 'Developer Productivity Tool',
+        title: 'Care-Verse',
+        org: 'AI/ML • Full Stack • Real-Time Healthcare',
         desc: [
-          'Loopin is a coding streak tracker that gamifies developer consistency. Visual analytics dashboards show session patterns, progress toward goals, and momentum metrics that keep developers in flow.',
-          'Inspired by GitHub contributions and habit-tracking apps, Loopin turns productive coding sessions into a visual story of growth.',
+          'Care-Verse is an AI-powered healthcare and patient transfer platform focused on patient monitoring, AI-based risk prediction, transfer workflows, and healthcare coordination. The project combines a Node.js + Express backend with a Python FastAPI AI decision-support service.',
+          'Core functionality covers patient records, live vitals, abnormal alert detection, risk scoring, role-based access, and transfer approval or rejection flows. The AI component acts as a decision-support layer rather than a clinical replacement.',
         ],
-        stack: ['HTML', 'CSS', 'JavaScript', 'LocalStorage API', 'Chart.js'],
-        links: [{ label: 'Live Demo', icon: 'fas fa-arrow-up-right-from-square', href: '#' }, { label: 'GitHub', icon: 'fab fa-github', href: 'https://github.com/tanmayyyyayyy' }],
+        stack: ['Node.js', 'Express.js', 'MongoDB', 'Socket.IO', 'JWT', 'Python', 'FastAPI', 'Scikit-learn', 'Random Forest'],
+        links: [{ label: 'GitHub', icon: 'fab fa-github', href: 'https://github.com/tanmayyyyayyy/Care-Verse' }],
       },
       {
-        title: 'TripPal',
-        org: 'AI Travel Planner',
+        title: 'Micro-Culture',
+        org: 'Full Stack • Community Platform • Product Development',
         desc: [
-          'TripPal is a smart itinerary generator that creates personalized travel plans based on budget, trip duration, and user preferences. Structured daily schedules with destination insights make planning effortless.',
-          'Powered by AI logic, TripPal understands travel context and generates coherent multi-day itineraries that feel human-planned, not algorithmic.',
+          'Micro-Culture is a community-first platform built around daily activities, shared experience, and evolving cultural memory. The app focuses on ritual participation, community discovery, and a polished product experience that surfaces useful social momentum.',
+          'The implementation combines a React frontend with a Node.js/Express backend and MongoDB storage, with AI-assisted ritual generation and culture memory features layered into the product experience.',
         ],
-        stack: ['HTML/CSS', 'JavaScript', 'Node.js', 'MongoDB', 'REST API'],
-        links: [{ label: 'Live Demo', icon: 'fas fa-arrow-up-right-from-square', href: '#' }, { label: 'GitHub', icon: 'fab fa-github', href: 'https://github.com/tanmayyyyayyy' }],
+        stack: ['React', 'Vite', 'Node.js', 'Express', 'MongoDB', 'JWT', 'AI-assisted tooling'],
+        links: [{ label: 'GitHub', icon: 'fab fa-github', href: 'https://github.com/tanmayyyyayyy/micro-culture' }, { label: 'Live Demo', icon: 'fas fa-arrow-up-right-from-square', href: 'https://micro-culture.onrender.com/' }],
       },
+      {
+        title: 'Smart Expense Tracker',
+        org: 'Frontend • Expense Tracking',
+        desc: [
+          'A client-side expense tracking app for recording transactions, keeping spending organized, and reviewing budget activity with a simple, focused interface.',
+          'The project emphasizes functional frontend design and practical daily utility without relying on fake or inflated product claims.'
+        ],
+        stack: ['React', 'TypeScript', 'Vite', 'CSS'],
+        links: [{ label: 'GitHub', icon: 'fab fa-github', href: 'https://github.com/tanmayyyyayyy/Smart-Expense-Tracker' }],
+      },
+      {
+        title: 'LoopIn',
+        org: 'Productivity • Developer Workflow',
+        desc: [
+          'LoopIn is a coding streak tracker and productivity dashboard built to help developers stay consistent and visualize progress. It focuses on practical habit tracking and a developer-centric workflow.',
+          'The product uses a clean interface and local persistence to create a lightweight, useful system for daily coding momentum.'
+        ],
+        stack: ['HTML', 'CSS', 'JavaScript', 'LocalStorage'],
+        links: [{ label: 'GitHub', icon: 'fab fa-github', href: 'https://github.com/tanmayyyyayyy/LoopIn' }, { label: 'Live Demo', icon: 'fas fa-arrow-up-right-from-square', href: 'https://tanmayyyyayyy.github.io/LoopIn/' }],
+      },
+      {
+        title: 'Tanmay Portfolio',
+        org: 'Portfolio • Personal Brand',
+        desc: [
+          'This portfolio is designed to present technical work, product thinking, and engineering depth in a clean professional format for internships and software roles.',
+          'It highlights the projects, skills, and technical interests most relevant to a recruiter and hiring manager.'
+        ],
+        stack: ['HTML', 'CSS', 'JavaScript'],
+        links: [{ label: 'GitHub', icon: 'fab fa-github', href: 'https://github.com/tanmayyyyayyy/Tanmay-portfolio' }],
+      }
     ];
 
     this._bind();

@@ -336,6 +336,17 @@ body.cursor-text .cursor-dot { width: 2px; height: 22px; border-radius: 1px; }
   display: flex; align-items: center; gap: 16px; margin-bottom: 52px;
 }
 
+.hero-badges {
+  display: flex; flex-wrap: wrap; gap: 10px;
+  margin-top: 8px;
+}
+.hero-badges span {
+  display: inline-flex; align-items: center; padding: 8px 12px;
+  border: 1px solid var(--border2); background: rgba(255,255,255,0.02);
+  color: var(--text2); font-family: var(--ff-mono); font-size: 0.6rem;
+  letter-spacing: 0.08em; text-transform: uppercase;
+}
+
 /* Buttons */
 .btn-main {
   position: relative; overflow: hidden;
@@ -835,6 +846,22 @@ body.cursor-text .cursor-dot { width: 2px; height: 22px; border-radius: 1px; }
 }
 .contact-heading em { font-family: var(--ff-serif); font-weight: 300; color: var(--gold); font-style: italic; }
 .contact-sub { font-family: var(--ff-serif); font-size: 1rem; color: var(--text2); line-height: 1.8; margin-bottom: 40px; }
+.contact-card {
+  background: var(--bg2); border: 1px solid var(--border); padding: 32px 28px;
+  box-shadow: 0 30px 80px rgba(0,0,0,0.28);
+}
+.contact-card h3 {
+  font-family: var(--ff-display); font-size: 2rem; color: var(--text); margin-bottom: 18px;
+}
+.contact-card ul {
+  list-style: none; padding: 0; margin: 0 0 26px; display: flex; flex-direction: column; gap: 12px;
+}
+.contact-card li {
+  color: var(--text2); font-size: 0.88rem; line-height: 1.7; position: relative; padding-left: 18px;
+}
+.contact-card li::before {
+  content: ''; position: absolute; left: 0; top: 10px; width: 6px; height: 6px; border-radius: 50%; background: var(--gold);
+}
 .contact-links { display: flex; flex-direction: column; gap: 0; }
 .c-link {
   display: flex; align-items: center; gap: 18px;
