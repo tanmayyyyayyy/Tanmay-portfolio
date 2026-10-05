@@ -1,51 +1,22 @@
-# Tanmay Jain | Portfolio
+# Tanmay Jain — Portfolio
 
-A personal portfolio website for Tanmay Jain, a 3rd-year Computer Science student with interests in full-stack development, backend engineering, AI/ML, and computer vision.
+Single page, scroll-driven portfolio built with Vite, React, TypeScript, Tailwind CSS, GSAP and Lenis.
 
-## Overview
+## Run locally
 
-This project is a single-page portfolio built with plain HTML, CSS, and JavaScript. It features:
-
-- Premium dark aesthetic with cinematic motion effects
-- Hero section with personal branding and typing animation
-- About section with current technical positioning
-- Skills overview for full-stack, backend, AI/ML, and computer vision
-- Featured project cards with links to GitHub and live demos
-- Resume section linking to a downloadable PDF
-- Contact section with email, LinkedIn, and GitHub links
-
-## Project Structure
-
-- `index.html` — page structure and content
-- `style.css` — design system, layout, and responsive styling
-- `script.js` — interactions, animations, and dynamic behavior
-- `resume.pdf` — latest resume PDF for download/view
-
-## Local Run
-
-You can run the site locally with any static file server:
-
-```bash
-cd /Users/tanmayjain/Tanmay-portfolio
-python3 -m http.server 8000
+```sh
+npm install
+npm run dev
 ```
 
-Then open:
+Create a `.env` file from `.env.example` and set `VITE_WEB3FORMS_ACCESS_KEY` to enable the contact form. Without a key, the form shows a setup message and directs visitors to email.
 
-```text
-http://localhost:8000
-```
+## Edit content and media
 
-## Resume
+Portfolio copy, links, projects, stack and skills live in `src/content/site.ts`. Add the portrait at `public/me.jpg` and replace the labeled project placeholders with screenshots when available. Add `public/share.jpg` for the Open Graph share image.
 
-The resume is available in the repository root as `resume.pdf` and is also linked from the portfolio UI.
+Project repo URLs currently marked `TODO` should be replaced with real repository URLs. The footer and lab social links are configured in the same content file.
 
-## Contact
+## GitHub Pages
 
-- Email: tanmayj209@gmail.com
-- LinkedIn: https://www.linkedin.com/in/tanmayyyayyy/
-- GitHub: https://github.com/tanmayyyyayyy
-
-## Notes
-
-This portfolio intentionally emphasizes skills and projects that are accurate, current, and relevant for internship and entry-level software engineering opportunities.
+The Vite base path is `/Tanmay-portfolio/`. The workflow in `.github/workflows/deploy.yml` builds and deploys on pushes to `main`; enable GitHub Pages with **GitHub Actions** as the deployment source in repository settings.
