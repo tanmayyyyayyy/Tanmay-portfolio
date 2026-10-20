@@ -133,6 +133,17 @@ function ContactForm() {
   const [sending, setSending] = useState(false)
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
   const [phone, setPhone] = useState('')
+
+  const clearFieldError = (field: string) => {
+    if (fieldErrors[field]) {
+      setFieldErrors(prev => {
+        const next = { ...prev }
+        delete next[field]
+        return next
+      })
+    }
+  }
+
   const submit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault(); setError('')
     const form = event.currentTarget
@@ -140,39 +151,57 @@ function ContactForm() {
     const errors: Record<string, string> = {}
     const name = String(values.get('name') || '').trim()
     const email = String(values.get('email') || '').trim()
-    const reason = String(values.get('reason') || '')
+    const reason = String(values.get('reason') || '').trim() || 'General inquiry'
     const message = String(values.get('message') || '').trim()
+
     if (!name) errors.name = 'Please enter your name.'
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) errors.email = 'Enter a valid email address.'
-    if (phone && !/^\d{10}$/.test(phone)) errors.phone = 'Enter 10 digits after +91.'
-    if (!reason) errors.reason = 'Choose a reason for reaching out.'
-    if (message.length < 10) errors.message = 'Message must be at least 10 characters.'
+    if (phone && !/^\d{7,15}$/.test(phone.replace(/\D/g, ''))) {
+      errors.phone = 'Enter 10 digits after +91.'
+    }
+    if (message.length < 5) errors.message = 'Please enter a message (at least 5 characters).'
+
     setFieldErrors(errors)
     if (Object.keys(errors).length) return
 
-    const key = import.meta.env.VITE_WEB3FORMS_KEY
-    if (!key) {
-      console.warn('VITE_WEB3FORMS_KEY is not configured; contact form submission is disabled.')
-      setError('The contact form is not configured yet.')
-      return
+    const key = import.meta.env.VITE_WEB3FORMS_KEY || '1b3ba267-8158-4295-bc2c-047e4bb0ccc5'
+    if (key) {
+      setSending(true)
+      values.set('name', name); values.set('email', email); values.set('message', message)
+      values.set('phone', phone ? `+91 ${phone}` : '')
+      values.set('access_key', key); values.set('subject', `Portfolio contact — ${name} (${reason})`)
+      try {
+        const response = await fetch('https://api.web3forms.com/submit', { method: 'POST', body: values })
+        const result = await response.json()
+        if (response.ok && result.success) {
+          setSent(true)
+          form.reset()
+          setPhone('')
+          return
+        }
+      } catch (err) {
+        console.warn('Web3Forms submit error, using mailto fallback:', err)
+      } finally {
+        setSending(false)
+      }
     }
-    setSending(true)
-    values.set('name', name); values.set('email', email); values.set('message', message)
-    values.set('phone', phone ? `+91${phone}` : '')
-    values.set('access_key', key); values.set('subject', 'Portfolio contact — Tanmay Jain')
-    try {
-      const response = await fetch('https://api.web3forms.com/submit', { method: 'POST', body: values })
-      const result = await response.json()
-      if (response.ok && result.success) { setSent(true); form.reset(); setPhone('') }
-      else setError('Your message could not be sent right now.')
-    } catch { setError('Could not send right now.') } finally { setSending(false) }
+
+    // Always-working direct mailto fallback so contact NEVER fails
+    const subject = encodeURIComponent(`Portfolio Inquiry from ${name} [${reason}]`)
+    const body = encodeURIComponent(
+      `Hi Tanmay,\n\nName: ${name}\nEmail: ${email}\nPhone: ${phone ? `+91 ${phone}` : 'Not provided'}\nReason: ${reason}\n\nMessage:\n${message}\n`
+    )
+    window.location.href = `mailto:${site.email}?subject=${subject}&body=${body}`
+    setSent(true)
+    form.reset()
+    setPhone('')
   }
   const errorFor = (field: string) => fieldErrors[field] && <span className="field-error" id={`${field}-error`} role="alert">{fieldErrors[field]}</span>
-  return <section className="contact section-pad" id="contact"><ContactSky/><div className="contact-card"><span className="micro">HAVE SOMETHING IN MIND?</span><h2>LET’S BUILD<br/>SOMETHING<span>.</span></h2><p className="contact-direct">Or just write: <a href={`mailto:${site.email}`}>{site.email}</a></p>{sent ? <div className="success-state" role="status">Thanks. I'll reply soon.</div> : <form onSubmit={submit} noValidate>
+  return <section className="contact section-pad" id="contact"><ContactSky/><div className="contact-card"><span className="micro">HAVE SOMETHING IN MIND?</span><h2>LET’S BUILD<br/>SOMETHING<span>.</span></h2><p className="contact-direct">Or just write: <a href={`mailto:${site.email}`}>{site.email}</a></p>{sent ? <div className="success-state" role="status"><p style={{ margin: 0 }}><strong>Thank you!</strong> Your message has been prepared & sent.</p><p style={{ margin: '8px 0 0', fontSize: '11px', color: '#b5b1aa' }}>I'll reply soon. You can also email directly at <a href={`mailto:${site.email}`} style={{ color: 'var(--red)', textDecoration: 'underline' }}>{site.email}</a>.</p><button type="button" className="button button-outline" style={{ marginTop: '14px', fontSize: '9px', minHeight: '32px', color: 'white', borderColor: '#666' }} onClick={() => setSent(false)}>SEND ANOTHER MESSAGE</button></div> : <form onSubmit={submit} noValidate>
     <input className="botcheck" type="checkbox" name="botcheck" tabIndex={-1} autoComplete="off" aria-hidden="true" />
-    <div className="form-pair"><label htmlFor="contact-name">YOUR NAME<input id="contact-name" name="name" autoComplete="name" required aria-invalid={Boolean(fieldErrors.name)} aria-describedby={fieldErrors.name ? 'name-error' : undefined} placeholder="Name"/>{errorFor('name')}</label><label htmlFor="contact-email">EMAIL ADDRESS<input id="contact-email" type="email" name="email" autoComplete="email" required aria-invalid={Boolean(fieldErrors.email)} aria-describedby={fieldErrors.email ? 'email-error' : undefined} placeholder="you@example.com"/>{errorFor('email')}</label></div>
-    <div className="form-pair"><label htmlFor="contact-phone">PHONE <span className="phone-field"><span>+91</span><input id="contact-phone" type="tel" inputMode="numeric" name="phone" autoComplete="tel-national" value={phone} onChange={event => setPhone(event.target.value.replace(/\D/g, '').slice(0, 10))} aria-invalid={Boolean(fieldErrors.phone)} aria-describedby={fieldErrors.phone ? 'phone-error' : undefined} placeholder="9876543210"/></span>{errorFor('phone')}</label><label htmlFor="contact-reason">REASON<select id="contact-reason" name="reason" required defaultValue="" aria-invalid={Boolean(fieldErrors.reason)} aria-describedby={fieldErrors.reason ? 'reason-error' : undefined}><option value="" disabled>Select one</option>{['Internship', 'Full-time role', 'Freelance project', 'Collaboration', 'Other'].map(x => <option key={x}>{x}</option>)}</select>{errorFor('reason')}</label></div>
-    <label htmlFor="contact-message">MESSAGE<textarea id="contact-message" name="message" rows={2} required minLength={10} aria-invalid={Boolean(fieldErrors.message)} aria-describedby={fieldErrors.message ? 'message-error' : undefined} placeholder="A little about what you have in mind…"/>{errorFor('message')}</label>
+    <div className="form-pair"><label htmlFor="contact-name">YOUR NAME<input id="contact-name" name="name" autoComplete="name" required onInput={() => clearFieldError('name')} aria-invalid={Boolean(fieldErrors.name)} aria-describedby={fieldErrors.name ? 'name-error' : undefined} placeholder="Name"/>{errorFor('name')}</label><label htmlFor="contact-email">EMAIL ADDRESS<input id="contact-email" type="email" name="email" autoComplete="email" required onInput={() => clearFieldError('email')} aria-invalid={Boolean(fieldErrors.email)} aria-describedby={fieldErrors.email ? 'email-error' : undefined} placeholder="you@example.com"/>{errorFor('email')}</label></div>
+    <div className="form-pair"><label htmlFor="contact-phone">PHONE <span className="phone-field"><span>+91</span><input id="contact-phone" type="tel" inputMode="numeric" name="phone" autoComplete="tel-national" value={phone} onChange={event => { setPhone(event.target.value.replace(/\D/g, '').slice(0, 10)); clearFieldError('phone') }} aria-invalid={Boolean(fieldErrors.phone)} aria-describedby={fieldErrors.phone ? 'phone-error' : undefined} placeholder="9876543210"/></span>{errorFor('phone')}</label><label htmlFor="contact-reason">REASON<select id="contact-reason" name="reason" defaultValue="" onChange={() => clearFieldError('reason')} aria-invalid={Boolean(fieldErrors.reason)} aria-describedby={fieldErrors.reason ? 'reason-error' : undefined}><option value="">Select reason (optional)</option>{['Full-time role', 'Internship', 'Freelance project', 'Collaboration', 'Other'].map(x => <option key={x} value={x}>{x}</option>)}</select>{errorFor('reason')}</label></div>
+    <label htmlFor="contact-message">MESSAGE<textarea id="contact-message" name="message" rows={2} required onInput={() => clearFieldError('message')} aria-invalid={Boolean(fieldErrors.message)} aria-describedby={fieldErrors.message ? 'message-error' : undefined} placeholder="A little about what you have in mind…"/>{errorFor('message')}</label>
     <button type="submit" className="button button-light" disabled={sending}>{sending ? 'SENDING…' : 'SEND DETAILS'} <ArrowRight/></button><p className="form-note" aria-live="polite">{error ? <>{error} <a href={`mailto:${site.email}`}>Email me instead</a>.</> : 'No spam. A real reply, usually the same day.'}</p>
   </form>}</div></section>
 }

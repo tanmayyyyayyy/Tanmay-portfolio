@@ -14,9 +14,10 @@ for (const source of sources) {
   try {
     const metadata = await sharp(source).metadata()
     for (const width of [480, 800, 1200]) {
-      if (!metadata.width || metadata.width <= width) continue
+      const isMe = source.endsWith('me.jpg')
+      if (!metadata.width || (!isMe && metadata.width <= width)) continue
       const output = source.replace(/\.jpe?g$/i, `-${width}.webp`)
-      await sharp(source).resize({ width }).webp({ quality: 82, effort: 6 }).toFile(output)
+      await sharp(source).resize({ width, withoutEnlargement: !isMe }).webp({ quality: 82, effort: 6 }).toFile(output)
       console.log(`Wrote ${path.relative(root, output)}`)
     }
   } catch (error) {
