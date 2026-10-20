@@ -553,7 +553,7 @@ function Lab() {
                 {i === 0 ? (
                   <>
                     <span>LANGGRAPH</span>
-                    <b>7-STAGE AGENT</b>
+                    <strong>7-STAGE AGENT</strong>
                     <span>FALLBACK</span>
                   </>
                 ) : (

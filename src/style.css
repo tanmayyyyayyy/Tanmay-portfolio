@@ -118,10 +118,10 @@
 .filter-count{font-size:10px;opacity:.7}
 
 /* Lab Visuals - High Contrast & Balanced */
-.lab-visual-0{display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap}
+.lab-visual-0{display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap;z-index:2}
 .lab-visual-0 span{padding:10px 14px;background:#eceae5;border:1px solid #aaa69d;font:600 11px 'DM Sans',sans-serif;letter-spacing:.08em;color:#0e0e0e}
-.lab-visual-0 b{padding:10px 14px;background:#171717;color:#fff;font:600 11px 'DM Sans',sans-serif;letter-spacing:.08em}
-.lab-visual-1{background:#191a1b;color:#8dbf8d;display:flex;flex-direction:column;gap:6px;padding:20px 24px;font:12px/1.5 monospace;border-radius:6px;box-shadow:0 14px 34px rgba(0,0,0,.2)}
+.lab-visual-0 strong{padding:10px 14px;background:#171717;color:#fff;font:600 11px 'DM Sans',sans-serif;letter-spacing:.08em}
+.lab-visual-1{background:#191a1b;color:#8dbf8d;display:flex;flex-direction:column;gap:6px;padding:20px 24px;font:12px/1.5 monospace;border-radius:6px;box-shadow:0 14px 34px rgba(0,0,0,.2);z-index:2}
 .lab-visual-1 span{font:inherit;color:inherit}
 
 /* Modal Global System */
