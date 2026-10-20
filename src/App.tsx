@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, type FormEvent, type SyntheticEvent } from 'react'
 import { Route, Routes, useNavigate, useParams } from 'react-router-dom'
-import { ArrowDown, ArrowRight, ArrowUpRight, Menu, X } from 'lucide-react'
+import { ArrowDown, ArrowRight, ArrowUpRight, Menu, X, Award, Cpu, Terminal, Shield } from 'lucide-react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import Lenis from 'lenis'
@@ -124,7 +124,277 @@ function ContactSky() {
 }
 
 function Statement() {
-  return <section className="statement section-pad"><div className="statement-orb" aria-hidden="true"><div className="orb-core">TJ</div></div><h2>TANMAY</h2><div className="statement-copy"><ArrowUpRight/><p>Concept. Code. Deployment.<br/>I like shipping things that actually work in the real world.</p></div></section>
+  const [activePillar, setActivePillar] = useState<'concept' | 'code' | 'deploy'>('concept')
+  const [activeStage, setActiveStage] = useState<number>(0)
+  const [mousePos, setMousePos] = useState<{ x: number; y: number }>({ x: 0, y: 0 })
+  const radarRef = useRef<HTMLDivElement>(null)
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!radarRef.current) return
+    const rect = radarRef.current.getBoundingClientRect()
+    const x = ((e.clientX - rect.left) / rect.width - 0.5) * 16
+    const y = ((e.clientY - rect.top) / rect.height - 0.5) * -16
+    setMousePos({ x, y })
+  }
+
+  const handleMouseLeave = () => {
+    setMousePos({ x: 0, y: 0 })
+  }
+
+  const pillars = {
+    concept: {
+      id: '01',
+      tag: 'AUTONOMOUS INTELLIGENCE & AGENTIC GRAPHS',
+      title: 'CONCEPT',
+      subtitle: 'Self-Healing State Machines',
+      lead: 'LLMs are probabilistic; production software must be deterministic. I design goal-driven agentic architectures with structured state graphs, multi-agent evaluation cycles, and zero-downtime deterministic fallbacks when models timeout or hit quota ceilings.',
+      highlight: 'Engineered MORPHOS (7-stage hypothesis & confidence engine) and GuardSaaB (AI agent permission governance with tamper-evident audit logs).',
+      icon: Cpu,
+      stats: [
+        { label: 'WORKFLOW ARCHITECTURE', value: '7-Stage State Graph' },
+        { label: 'ERROR RESILIENCE', value: 'Deterministic Fallback' },
+        { label: 'AGENTIC FRAMEWORK', value: 'LangGraph & LangChain' },
+      ],
+    },
+    code: {
+      id: '02',
+      tag: 'ENTERPRISE FULL-STACK & RIGOROUS TESTING',
+      title: 'CODE',
+      subtitle: 'Type-Safe Architecture & Coverage',
+      lead: 'Code that works once is a prototype; code that works under latency, rate-limiting, and edge cases is software. From Java 21 & Spring Boot enterprise REST services with Flyway migrations to TypeScript full-stack systems backed by 365+ automated tests, every layer is engineered for reliability.',
+      highlight: 'Maintains 365+ automated test suites with Vitest & JUnit 5, coupled with a 9.04 / 10 academic CGPA in CSE (AI & ML) at JECRC University.',
+      icon: Terminal,
+      stats: [
+        { label: 'AUTOMATED TEST SUITES', value: '365+ Tests' },
+        { label: 'ACADEMIC CGPA', value: '9.04 / 10' },
+        { label: 'ALGORITHMIC PRACTICE', value: '100+ DSA in C++' },
+      ],
+    },
+    deploy: {
+      id: '03',
+      tag: 'HIGH-STAKES EXECUTION & COMPETITIVE PROWESS',
+      title: 'DEPLOYMENT',
+      subtitle: 'Proven Under High-Stakes Pressure',
+      lead: 'Theory is validated only when put to the test under real pressure. Won 1st Runner-Up at the CodeX 3.0 Hackathon competing against 100 teams in an intense 36-hour sprint, creating GuardSaaB — an AI agent governance system with tamper-evident audit logs and permission enforcement.',
+      highlight: 'Secured ₹40,000 cash prize among top 1% of 100 competing engineering teams across India.',
+      icon: Award,
+      stats: [
+        { label: 'HACKATHON RANK', value: '1st Runner-Up' },
+        { label: 'TEAMS COMPETING', value: '100 Teams' },
+        { label: 'AWARD SECURED', value: '₹40,000 Cash Prize' },
+      ],
+    },
+  }
+
+  const pipeline = [
+    { step: '01', title: 'HYPOTHESIS & DOMAIN MODEL', detail: 'Formalizing state spaces, schema boundaries, and invariants' },
+    { step: '02', title: 'LANGGRAPH MULTI-AGENT CORE', detail: 'State machines with confidence thresholds & cycle control' },
+    { step: '03', title: 'EXHAUSTIVE TEST HARNESS', detail: '365+ tests covering edge cases, latency, and quota fallbacks' },
+    { step: '04', title: 'CONTAINERIZED CLOUD DEPLOY', detail: 'Dockerized runtime with CI/CD and production monitoring' },
+  ]
+
+  const current = pillars[activePillar]
+  const CurrentIcon = current.icon
+
+  return (
+    <section className="statement section-pad" id="manifesto">
+      <div className="nexus-top">
+        <div className="nexus-head-left">
+          <span className="micro">05 / CORE ARCHITECTURE & MANIFESTO</span>
+          <span className="nexus-subhead">ENGINEERED FOR THE REAL WORLD</span>
+        </div>
+        <div className="nexus-telemetry">
+          <span className="telemetry-dot" />
+          <span className="telemetry-text">STATUS: NOMINAL</span>
+          <span className="telemetry-sep">/</span>
+          <span className="telemetry-text">JAIPUR [26.91°N, 75.79°E]</span>
+          <span className="telemetry-sep">/</span>
+          <span className="telemetry-text">UPTIME: 100%</span>
+        </div>
+      </div>
+
+      <div className="nexus-grid">
+        <div
+          ref={radarRef}
+          className="nexus-radar-wrap"
+          onMouseMove={handleMouseMove}
+          onMouseLeave={handleMouseLeave}
+        >
+          <div
+            className="nexus-radar"
+            style={{
+              transform: `perspective(900px) rotateX(${mousePos.y}deg) rotateY(${mousePos.x}deg)`,
+            }}
+          >
+            <svg className="radar-svg" viewBox="0 0 460 460" fill="none">
+              <defs>
+                <linearGradient id="beamGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stopColor="#b3122a" stopOpacity="0.45" />
+                  <stop offset="100%" stopColor="#b3122a" stopOpacity="0" />
+                </linearGradient>
+              </defs>
+
+              <circle cx="230" cy="230" r="215" stroke="rgba(255,255,255,0.08)" strokeWidth="1" strokeDasharray="3 4" />
+              <circle cx="230" cy="230" r="175" stroke="rgba(255,255,255,0.12)" strokeWidth="1" />
+              <circle cx="230" cy="230" r="125" stroke="rgba(179,18,42,0.3)" strokeWidth="1.2" strokeDasharray="6 6" />
+              <circle cx="230" cy="230" r="75" stroke="rgba(255,255,255,0.15)" strokeWidth="1" />
+
+              <line x1="230" y1="10" x2="230" y2="450" stroke="rgba(255,255,255,0.06)" strokeWidth="1" />
+              <line x1="10" y1="230" x2="450" y2="230" stroke="rgba(255,255,255,0.06)" strokeWidth="1" />
+
+              <text x="230" y="28" fill="#888" fontSize="9" textAnchor="middle" letterSpacing="0.1em">000°</text>
+              <text x="442" y="233" fill="#888" fontSize="9" textAnchor="end" letterSpacing="0.1em">090°</text>
+              <text x="230" y="445" fill="#888" fontSize="9" textAnchor="middle" letterSpacing="0.1em">180°</text>
+              <text x="18" y="233" fill="#888" fontSize="9" textAnchor="start" letterSpacing="0.1em">270°</text>
+
+              <g className="radar-sweep">
+                <path d="M 230 230 L 230 15 A 215 215 0 0 1 382 78 Z" fill="url(#beamGradient)" />
+                <line x1="230" y1="230" x2="382" y2="78" stroke="#b3122a" strokeWidth="1.5" />
+              </g>
+
+              <g className={`orbit-node node-concept ${activePillar === 'concept' ? 'active' : ''}`} onClick={() => setActivePillar('concept')}>
+                <circle cx="345" cy="140" r="9" fill={activePillar === 'concept' ? '#b3122a' : 'rgba(255,255,255,0.1)'} stroke="#b3122a" strokeWidth="2" />
+                <text x="360" y="144" fill={activePillar === 'concept' ? '#fff' : '#888'} fontSize="8" letterSpacing="0.12em">01 // AI</text>
+              </g>
+
+              <g className={`orbit-node node-code ${activePillar === 'code' ? 'active' : ''}`} onClick={() => setActivePillar('code')}>
+                <circle cx="115" cy="140" r="9" fill={activePillar === 'code' ? '#b3122a' : 'rgba(255,255,255,0.1)'} stroke="#b3122a" strokeWidth="2" />
+                <text x="48" y="144" fill={activePillar === 'code' ? '#fff' : '#888'} fontSize="8" letterSpacing="0.12em">02 // CODE</text>
+              </g>
+
+              <g className={`orbit-node node-deploy ${activePillar === 'deploy' ? 'active' : ''}`} onClick={() => setActivePillar('deploy')}>
+                <circle cx="230" cy="355" r="9" fill={activePillar === 'deploy' ? '#b3122a' : 'rgba(255,255,255,0.1)'} stroke="#b3122a" strokeWidth="2" />
+                <text x="246" y="359" fill={activePillar === 'deploy' ? '#fff' : '#888'} fontSize="8" letterSpacing="0.12em">03 // PROD</text>
+              </g>
+            </svg>
+
+            <div className="radar-core-center">
+              <span className="radar-core-micro">SYSTEM CORE // 2026</span>
+              <h2 className="radar-core-brand">TANMAY</h2>
+              <span className="radar-core-status">ENGINEERING NEXUS</span>
+            </div>
+          </div>
+
+          <div className="radar-footer-caption">
+            <span>[PARALLAX TILT ACTIVE]</span>
+            <span>CLICK ORBIT NODES OR TABS TO INSPECT</span>
+          </div>
+        </div>
+
+        <div className="nexus-console">
+          <div className="nexus-tabs" role="tablist">
+            {(['concept', 'code', 'deploy'] as const).map(key => (
+              <button
+                key={key}
+                type="button"
+                role="tab"
+                aria-selected={activePillar === key}
+                className={`nexus-tab ${activePillar === key ? 'active' : ''}`}
+                onClick={() => setActivePillar(key)}
+              >
+                <span className="tab-num">0{key === 'concept' ? 1 : key === 'code' ? 2 : 3}</span>
+                <span className="tab-name">{key.toUpperCase()}</span>
+              </button>
+            ))}
+          </div>
+
+          <div className="pillar-display" key={activePillar}>
+            <div className="pillar-header">
+              <div className="pillar-icon-badge">
+                <CurrentIcon size={20} />
+              </div>
+              <div>
+                <span className="pillar-eyebrow">{current.tag}</span>
+                <h3 className="pillar-title">
+                  {current.title} <span>— {current.subtitle}</span>
+                </h3>
+              </div>
+            </div>
+
+            <p className="pillar-lead">{current.lead}</p>
+
+            <div className="pillar-proof">
+              <Shield className="proof-icon" size={16} />
+              <div>
+                <strong className="proof-label">VERIFIED DELIVERABLE & PROOF</strong>
+                <p className="proof-desc">{current.highlight}</p>
+              </div>
+            </div>
+
+            <div className="pillar-specs-grid">
+              {current.stats.map(s => (
+                <div key={s.label} className="spec-item">
+                  <span className="spec-label">{s.label}</span>
+                  <strong className="spec-value">{s.value}</strong>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="nexus-metrics-strip">
+        <div className="metric-box">
+          <div className="metric-top">
+            <span className="metric-val">9.04</span>
+            <span className="metric-unit">/ 10</span>
+          </div>
+          <span className="metric-label">ACADEMIC CGPA (B.TECH AI & ML)</span>
+          <p className="metric-sub">JECRC University · Distinction in Systems & Algorithms</p>
+        </div>
+
+        <div className="metric-box highlighted">
+          <div className="metric-top">
+            <span className="metric-val">1st Runner-Up</span>
+            <Award className="metric-badge-icon" size={20} />
+          </div>
+          <span className="metric-label">CODEX 3.0 HACKATHON WINNER</span>
+          <p className="metric-sub">Top 1% of 100 teams · ₹40,000 cash prize · GuardSaaB</p>
+        </div>
+
+        <div className="metric-box">
+          <div className="metric-top">
+            <span className="metric-val">365+</span>
+            <span className="metric-unit">Tests</span>
+          </div>
+          <span className="metric-label">AUTOMATED TEST SUITES</span>
+          <p className="metric-sub">Across 32 suites in Vitest & JUnit 5 · Zero unverified code</p>
+        </div>
+
+        <div className="metric-box">
+          <div className="metric-top">
+            <span className="metric-val">100+</span>
+            <span className="metric-unit">Solved</span>
+          </div>
+          <span className="metric-label">ALGORITHMIC PROBLEMS (C++)</span>
+          <p className="metric-sub">LeetCode & GeeksforGeeks · Arrays, Trees, Dynamic Prog.</p>
+        </div>
+      </div>
+
+      <div className="nexus-pipeline">
+        <div className="pipeline-header">
+          <span className="micro">SYSTEM PIPELINE</span>
+          <p>FROM FIRST PRINCIPLES TO RELIABLE CLOUD EXECUTION</p>
+        </div>
+        <div className="pipeline-stages">
+          {pipeline.map((p, idx) => (
+            <div
+              key={p.step}
+              className={`pipeline-stage ${activeStage === idx ? 'active' : ''}`}
+              onClick={() => setActiveStage(idx)}
+            >
+              <div className="stage-top">
+                <span className="stage-num">{p.step}</span>
+                <span className="stage-tag">{idx === 3 ? 'DEPLOY' : 'BUILD'}</span>
+              </div>
+              <strong className="stage-title">{p.title}</strong>
+              <p className="stage-detail">{p.detail}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
 }
 
 function ContactForm() {
@@ -229,7 +499,7 @@ function Portfolio() {
     const ctx = gsap.context(() => {
       gsap.utils.toArray<HTMLElement>('.section-title').forEach(el => gsap.from(el, { y: 45, opacity: 0, duration: 1, ease: 'power3.out', scrollTrigger: { trigger: el, start: 'top 88%' } }))
       gsap.to('.hero-image', { yPercent: 9, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true } })
-      gsap.fromTo('.statement-orb', { scale: .84 }, { scale: 1.12, ease: 'none', scrollTrigger: { trigger: '.statement', start: 'top top', end: '+=70%', scrub: true, pin: true, anticipatePin: 1 } })
+      gsap.fromTo('.nexus-radar', { scale: .92, rotate: -5 }, { scale: 1.04, rotate: 5, ease: 'none', scrollTrigger: { trigger: '.statement', start: 'top 85%', end: 'bottom 15%', scrub: 1 } })
     })
     return () => { ctx.revert(); gsap.ticker.remove(ticker); lenis.destroy() }
   }, [])
