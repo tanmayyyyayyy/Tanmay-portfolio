@@ -2,8 +2,7 @@ import { useEffect, useRef, useState, type FormEvent, type SyntheticEvent } from
 import { Route, Routes, useNavigate, useParams } from 'react-router-dom'
 import {
   ArrowDown, ArrowRight, ArrowUpRight, Menu, X, Award, Cpu, Terminal, Shield,
-  Copy, FileText, Download, Phone, Mail, ExternalLink, Sparkles,
-  GraduationCap, CheckCircle2
+  FileText, Download, Phone, Mail, ExternalLink
 } from 'lucide-react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
@@ -74,21 +73,6 @@ function ResponsiveImage({
   )
 }
 
-function Toast({ message, onClear }: { message: string | null; onClear: () => void }) {
-  useEffect(() => {
-    if (!message) return
-    const timer = window.setTimeout(onClear, 2800)
-    return () => window.clearTimeout(timer)
-  }, [message, onClear])
-  if (!message) return null
-  return (
-    <div className="toast-bar" role="status" aria-live="polite">
-      <CheckCircle2 size={16} color="#10b981" />
-      <span>{message}</span>
-    </div>
-  )
-}
-
 function ResumeModal({ open, onClose }: { open: boolean; onClose: () => void }) {
   useEffect(() => {
     if (!open) return
@@ -136,152 +120,7 @@ function ResumeModal({ open, onClose }: { open: boolean; onClose: () => void }) 
   )
 }
 
-function RecruiterDossierModal({
-  open, onClose, onOpenResume, onCopyEmail, onCopyPhone
-}: {
-  open: boolean;
-  onClose: () => void;
-  onOpenResume: () => void;
-  onCopyEmail: () => void;
-  onCopyPhone: () => void;
-}) {
-  useEffect(() => {
-    if (!open) return
-    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose() }
-    document.addEventListener('keydown', onKey)
-    return () => document.removeEventListener('keydown', onKey)
-  }, [open, onClose])
-
-  if (!open) return null
-
-  return (
-    <div className="modal-overlay" onClick={onClose} role="dialog" aria-modal="true" aria-label="Recruiter Fast-Track Dossier">
-      <div className="modal-container" onClick={e => e.stopPropagation()}>
-        <div className="modal-header">
-          <div className="modal-title-group">
-            <Sparkles size={18} color="var(--red)" />
-            <h3 className="modal-title">Recruiter Fast-Track // Executive Dossier</h3>
-            <span className="modal-tag">AVAILABLE FOR ROLES</span>
-          </div>
-          <div className="modal-actions">
-            <button className="modal-btn primary" onClick={() => { onClose(); onOpenResume() }}>
-              <FileText size={13} />
-              <span>Preview Resume</span>
-            </button>
-            <button className="modal-close-btn" onClick={onClose} aria-label="Close modal">
-              <X size={18} />
-            </button>
-          </div>
-        </div>
-
-        <div className="modal-body">
-          <div className="dossier-grid">
-            <div className="dossier-card featured">
-              <span className="dossier-card-label">
-                <GraduationCap size={13} color="var(--red)" />
-                EDUCATION & ACADEMICS
-              </span>
-              <div className="dossier-card-value">B.Tech CSE (AI & ML) · 9.04 / 10 CGPA</div>
-              <p className="dossier-card-desc">
-                JECRC University, Jaipur (Class of 2028). Strong foundations in Data Structures, Algorithms, DBMS, Operating Systems, and AI systems.
-              </p>
-            </div>
-
-            <div className="dossier-card featured">
-              <span className="dossier-card-label">
-                <Award size={13} color="var(--red)" />
-                COMPETITIVE EXCELLENCE
-              </span>
-              <div className="dossier-card-value">1st Runner-Up · CodeX 3.0 Hackathon</div>
-              <p className="dossier-card-desc">
-                Ranked in top 1% among 100 teams (₹40,000 cash prize). Engineered GuardSaaB — an AI agent governance engine with permission enforcement.
-              </p>
-            </div>
-
-            <div className="dossier-card">
-              <span className="dossier-card-label">
-                <Terminal size={13} />
-                SOFTWARE RELIABILITY
-              </span>
-              <div className="dossier-card-value">365+ Automated Tests Written</div>
-              <p className="dossier-card-desc">
-                Vitest & JUnit 5 test suites across 32 suites. Zero untested logic, automated API quota fallback mechanisms (HTTP 429), and robust error handling.
-              </p>
-            </div>
-
-            <div className="dossier-card">
-              <span className="dossier-card-label">
-                <Cpu size={13} />
-                ALGORITHMIC PROBLEM SOLVING
-              </span>
-              <div className="dossier-card-value">100+ Solved in C++ (LeetCode & GFG)</div>
-              <p className="dossier-card-desc">
-                Consistent algorithmic focus on optimal time-space complexity, trees, graphs, sorting, and dynamic programming.
-              </p>
-            </div>
-          </div>
-
-          <div className="dossier-stack-group">
-            <div className="dossier-stack-title">// VERIFIED PRODUCTION CAPABILITIES</div>
-            <div className="dossier-pills">
-              {site.stack.map(tech => (
-                <span key={tech} className="dossier-pill">{tech}</span>
-              ))}
-            </div>
-          </div>
-
-          <div className="dossier-stack-group">
-            <div className="dossier-stack-title">// CANDIDATE LOGISTICS & AVAILABILITY</div>
-            <p style={{ fontSize: '12px', color: '#ccc', margin: '0 0 10px', lineHeight: 1.5 }}>
-              • <strong>Target Roles:</strong> AI/ML Engineer, Full-Stack Developer, Software Engineer, Backend Developer<br />
-              • <strong>Availability:</strong> Summer 2025/2026 Internships & Full-Time Graduating Roles<br />
-              • <strong>Work Authorization:</strong> India (Open to Relocation: Bangalore, Delhi/NCR, Hyderabad, Pune, Mumbai, Worldwide, & Remote)
-            </p>
-          </div>
-
-          <div className="dossier-contact-bar">
-            <div className="dossier-contact-info">
-              <span className="dossier-contact-item">
-                <Mail size={13} color="var(--red)" />
-                {site.email}
-              </span>
-              <span className="dossier-contact-item">
-                <Phone size={13} color="#10b981" />
-                {site.phone}
-              </span>
-            </div>
-            <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-              <button className="modal-btn" onClick={onCopyEmail}>
-                <Copy size={12} />
-                <span>Copy Email</span>
-              </button>
-              <button className="modal-btn" onClick={onCopyPhone}>
-                <Phone size={12} />
-                <span>Copy Phone</span>
-              </button>
-              <a className="modal-btn" href={site.links.linkedin} target="_blank" rel="noreferrer">
-                <span>LinkedIn</span>
-                <ArrowUpRight size={12} />
-              </a>
-              <a className="modal-btn" href={site.links.github} target="_blank" rel="noreferrer">
-                <span>GitHub</span>
-                <ArrowUpRight size={12} />
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  )
-}
-
-function Header({
-  onOpenRecruiter, onOpenResume, onCopyEmail
-}: {
-  onOpenRecruiter: () => void;
-  onOpenResume: () => void;
-  onCopyEmail: () => void;
-}) {
+function Header({ onOpenResume }: { onOpenResume: () => void }) {
   const [open, setOpen] = useState(false)
   const toggleRef = useRef<HTMLButtonElement>(null)
   const close = () => setOpen(false)
@@ -318,48 +157,28 @@ function Header({
           TANMAY.JAIN<sup>®</sup>
         </a>
 
-        <div className="header-actions">
-          <button
-            type="button"
-            className="header-pill-btn accent"
-            onClick={onOpenRecruiter}
-            title="Open 30-second recruiter executive briefing"
-          >
-            <span className="pulse-dot" />
-            <span>RECRUITER BRIEF</span>
-          </button>
+        <span className="header-location">AI / ML + FULL-STACK · JAIPUR, IN</span>
 
-          <button
-            type="button"
-            className="header-pill-btn"
-            onClick={onOpenResume}
-            title="Preview verified resume PDF"
-          >
-            <FileText size={12} />
-            <span className="hide-mobile">RESUME</span>
-          </button>
+        <button
+          type="button"
+          className="header-resume-btn"
+          onClick={onOpenResume}
+          aria-label="View verified resume PDF"
+        >
+          <FileText size={12} />
+          <span>RESUME</span>
+        </button>
 
-          <button
-            type="button"
-            className="header-pill-btn"
-            onClick={onCopyEmail}
-            title="Copy email to clipboard"
-          >
-            <Copy size={12} />
-            <span className="hide-mobile">COPY EMAIL</span>
-          </button>
-
-          <button
-            ref={toggleRef}
-            className="menu-toggle"
-            onClick={() => setOpen(!open)}
-            aria-expanded={open}
-            aria-label={open ? 'Close menu' : 'Open menu'}
-          >
-            {open ? <X /> : <Menu />}
-            <span>{open ? 'CLOSE' : 'MENU'}</span>
-          </button>
-        </div>
+        <button
+          ref={toggleRef}
+          className="menu-toggle"
+          onClick={() => setOpen(!open)}
+          aria-expanded={open}
+          aria-label={open ? 'Close menu' : 'Open menu'}
+        >
+          {open ? <X /> : <Menu />}
+          <span>{open ? 'CLOSE' : 'MENU'}</span>
+        </button>
       </header>
 
       {open && (
@@ -372,7 +191,7 @@ function Header({
             </a>
           ))}
           <div className="menu-foot micro">
-            JAIPUR, INDIA · 9.04 CGPA · OPEN TO ROLES WORLDWIDE
+            JAIPUR, INDIA · 9.04 CGPA · AVAILABLE FOR WHAT'S NEXT
           </div>
         </nav>
       )}
@@ -380,56 +199,22 @@ function Header({
   )
 }
 
-function Hero({
-  onOpenRecruiter, onOpenResume, onCopyEmail
-}: {
-  onOpenRecruiter: () => void;
-  onOpenResume: () => void;
-  onCopyEmail: () => void;
-}) {
+function Hero({ onOpenResume }: { onOpenResume: () => void }) {
   return (
     <section className="hero section-pad" id="home">
       <div className="hero-copy">
         <p className="eyebrow">
-          <span className="red-dot" /> OPEN TO WORK <span className="eyebrow-sep">/</span> 9.04 CGPA @ JECRC UNIVERSITY
+          <span className="red-dot" /> OPEN TO WORK <span className="eyebrow-sep">/</span> {site.location}
         </p>
         <h1>
           Tanmay<br />
           <span>Jain</span>
         </h1>
-        <p className="hero-role">AI/ML Engineer <i>•</i> Full-Stack Developer <i>•</i> Systems Builder</p>
+        <p className="hero-role">AI/ML Developer <i>•</i> Full-Stack Developer <i>•</i> Systems Builder</p>
         <p className="hero-intro">{site.intro}</p>
 
-        <div className="hero-recruiter-card">
-          <div className="hero-recruiter-header">
-            <span className="hero-recruiter-title">
-              <Sparkles size={13} />
-              RECRUITER SUMMARY // FAST-TRACK
-            </span>
-            <span className="hero-recruiter-status">
-              <span className="pulse-dot" />
-              AVAILABLE FOR HIRE (INTERNSHIP & FULL-TIME)
-            </span>
-          </div>
-
-          <div className="hero-recruiter-pills">
-            <span className="recruiter-pill-badge highlight">
-              <strong>9.04 / 10 CGPA</strong> (B.Tech AI & ML)
-            </span>
-            <span className="recruiter-pill-badge highlight">
-              <strong>1st Runner-Up</strong> CodeX 3.0 Hackathon (₹40k Prize)
-            </span>
-            <span className="recruiter-pill-badge">
-              <strong>365+</strong> Automated Tests (Vitest & JUnit 5)
-            </span>
-            <span className="recruiter-pill-badge">
-              <strong>100+</strong> DSA in C++ (LeetCode)
-            </span>
-          </div>
-        </div>
-
         <div className="chips">
-          {['LangGraph', 'Java 21 / Spring Boot', 'React 18 & TypeScript', 'Docker', 'REST APIs', 'Multi-Agent AI'].map(x => (
+          {['AI & Agentic Systems', 'Java 21 & Spring Boot', 'React & TypeScript', 'Docker & Cloud'].map(x => (
             <span key={x}>{x}</span>
           ))}
         </div>
@@ -441,12 +226,9 @@ function Hero({
           <button type="button" className="button button-outline" onClick={onOpenResume}>
             PREVIEW RESUME <FileText size={14} style={{ marginLeft: 6 }} />
           </button>
-          <button type="button" className="button button-outline" onClick={onOpenRecruiter}>
-            30-SEC BRIEF <Sparkles size={14} style={{ marginLeft: 6 }} />
-          </button>
-          <button type="button" className="button button-outline" onClick={onCopyEmail}>
-            COPY EMAIL <Copy size={13} style={{ marginLeft: 6 }} />
-          </button>
+          <a className="button button-outline" href="#contact">
+            GET IN TOUCH <ArrowRight />
+          </a>
         </div>
       </div>
 
@@ -468,9 +250,9 @@ function Hero({
         <ArrowDown /> SCROLL TO EXPLORE
       </a>
       {site.openToWorkTab && (
-        <button type="button" className="work-tab" onClick={onOpenRecruiter}>
+        <a className="work-tab" href="#contact">
           OPEN TO WORK
-        </button>
+        </a>
       )}
     </section>
   )
@@ -770,23 +552,15 @@ function Lab() {
               <div className={`lab-visual lab-visual-${i}`}>
                 {i === 0 ? (
                   <>
-                    <span>INPUT</span>
-                    <b>AGENT</b>
+                    <span>LANGGRAPH</span>
+                    <b>7-STAGE AGENT</b>
                     <span>FALLBACK</span>
-                    <b>OUTPUT</b>
-                  </>
-                ) : i === 1 ? (
-                  <>
-                    <span>JAVA 21</span>
-                    <b>SPRING</b>
-                    <span>FLYWAY</span>
-                    <b>MOCKITO</b>
                   </>
                 ) : (
                   <>
-                    <span>01 vector&lt;int&gt;</span>
-                    <span>02 sort(nums)</span>
-                    <span>03 return result</span>
+                    <span>01 &nbsp;Java 21 · Spring Boot</span>
+                    <span>02 &nbsp;Flyway · JUnit 5 + Mockito</span>
+                    <span>03 &nbsp;100+ LeetCode DSA in C++</span>
                   </>
                 )}
               </div>
@@ -1154,12 +928,7 @@ function Statement() {
   )
 }
 
-function ContactForm({
-  onCopyEmail, onCopyPhone
-}: {
-  onCopyEmail: () => void;
-  onCopyPhone: () => void;
-}) {
+function ContactForm() {
   const [sent, setSent] = useState(false)
   const [error, setError] = useState('')
   const [sending, setSending] = useState(false)
@@ -1184,7 +953,7 @@ function ContactForm({
     const errors: Record<string, string> = {}
     const name = String(values.get('name') || '').trim()
     const email = String(values.get('email') || '').trim()
-    const reason = String(values.get('reason') || '').trim() || 'Recruiter inquiry'
+    const reason = String(values.get('reason') || '').trim() || 'General inquiry'
     const message = String(values.get('message') || '').trim()
 
     if (!name) errors.name = 'Please enter your name.'
@@ -1205,7 +974,7 @@ function ContactForm({
       values.set('message', message)
       values.set('phone', phone ? `+91 ${phone}` : '')
       values.set('access_key', key)
-      values.set('subject', `Portfolio / Recruiter Contact — ${name} (${reason})`)
+      values.set('subject', `Portfolio Contact — ${name} (${reason})`)
       try {
         const response = await fetch('https://api.web3forms.com/submit', { method: 'POST', body: values })
         const result = await response.json()
@@ -1222,7 +991,6 @@ function ContactForm({
       }
     }
 
-    // Always-working direct mailto fallback so contact NEVER fails
     const subject = encodeURIComponent(`Portfolio Inquiry from ${name} [${reason}]`)
     const body = encodeURIComponent(
       `Hi Tanmay,\n\nName: ${name}\nEmail: ${email}\nPhone: ${phone ? `+91 ${phone}` : 'Not provided'}\nReason: ${reason}\n\nMessage:\n${message}\n`
@@ -1244,36 +1012,34 @@ function ContactForm({
     <section className="contact section-pad" id="contact">
       <ContactSky />
       <div className="contact-card">
-        <span className="micro">RECRUITERS & COLLABORATORS</span>
+        <span className="micro">HAVE SOMETHING IN MIND?</span>
         <h2>
           LET’S CONNECT<br />
           & BUILD<span>.</span>
         </h2>
 
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10, margin: '14px 0 24px', alignItems: 'center' }}>
-          <button type="button" className="modal-btn" onClick={onCopyEmail}>
-            <Mail size={13} color="var(--red)" />
+          <a className="button button-light" href={`mailto:${site.email}`}>
+            <Mail size={13} style={{ marginRight: 6 }} />
             <span>{site.email}</span>
-            <Copy size={11} style={{ marginLeft: 4 }} />
-          </button>
-          <button type="button" className="modal-btn" onClick={onCopyPhone}>
-            <Phone size={13} color="#10b981" />
+          </a>
+          <a className="button button-light" href={`tel:${site.phone.replace(/\s+/g, '')}`}>
+            <Phone size={13} style={{ marginRight: 6 }} />
             <span>{site.phone}</span>
-            <Copy size={11} style={{ marginLeft: 4 }} />
-          </button>
+          </a>
         </div>
 
         {sent ? (
           <div className="success-state" role="status">
             <p style={{ margin: 0 }}>
-              <strong>Thank you!</strong> Your message has been received.
+              <strong>Thank you!</strong> Your message has been sent.
             </p>
             <p style={{ margin: '8px 0 0', fontSize: '11px', color: '#b5b1aa' }}>
-              I respond promptly to recruiter inquiries, usually within 12 hours. You can also reach me directly at{' '}
+              I respond promptly, usually within 12 hours. You can also email directly at{' '}
               <a href={`mailto:${site.email}`} style={{ color: 'var(--red)', textDecoration: 'underline' }}>
                 {site.email}
               </a>{' '}
-              or{' '}
+              or call{' '}
               <a href={`tel:${site.phone}`} style={{ color: '#fff', textDecoration: 'underline' }}>
                 {site.phone}
               </a>.
@@ -1301,12 +1067,12 @@ function ContactForm({
                   onInput={() => clearFieldError('name')}
                   aria-invalid={Boolean(fieldErrors.name)}
                   aria-describedby={fieldErrors.name ? 'name-error' : undefined}
-                  placeholder="Recruiter or Engineering Manager name"
+                  placeholder="Your Name"
                 />
                 {errorFor('name')}
               </label>
               <label htmlFor="contact-email">
-                WORK EMAIL
+                EMAIL ADDRESS
                 <input
                   id="contact-email"
                   type="email"
@@ -1316,7 +1082,7 @@ function ContactForm({
                   onInput={() => clearFieldError('email')}
                   aria-invalid={Boolean(fieldErrors.email)}
                   aria-describedby={fieldErrors.email ? 'email-error' : undefined}
-                  placeholder="name@company.com"
+                  placeholder="you@example.com"
                 />
                 {errorFor('email')}
               </label>
@@ -1360,8 +1126,7 @@ function ContactForm({
                     'Summer / Fall Internship',
                     'Full-Stack / Software Engineering Role',
                     'Backend / Java Role',
-                    'Technical Interview Request',
-                    'Other Inquiry'
+                    'Collaboration / Other'
                   ].map(x => (
                     <option key={x} value={x}>{x}</option>
                   ))}
@@ -1370,7 +1135,7 @@ function ContactForm({
               </label>
             </div>
             <label htmlFor="contact-message">
-              MESSAGE / ROLE DETAILS
+              MESSAGE
               <textarea
                 id="contact-message"
                 name="message"
@@ -1379,7 +1144,7 @@ function ContactForm({
                 onInput={() => clearFieldError('message')}
                 aria-invalid={Boolean(fieldErrors.message)}
                 aria-describedby={fieldErrors.message ? 'message-error' : undefined}
-                placeholder="Share role description, team context, or interview details…"
+                placeholder="A little about what you have in mind…"
               />
               {errorFor('message')}
             </label>
@@ -1392,7 +1157,7 @@ function ContactForm({
                   {error} <a href={`mailto:${site.email}`}>Email me instead</a>.
                 </>
               ) : (
-                'Response guaranteed within 12 hours. Direct reply straight to your inbox.'
+                'No spam. A real reply, usually the same day.'
               )}
             </p>
           </form>
@@ -1497,22 +1262,6 @@ function ProjectDetail() {
 
 function Portfolio() {
   const [resumeOpen, setResumeOpen] = useState(false)
-  const [recruiterOpen, setRecruiterOpen] = useState(false)
-  const [toastMsg, setToastMsg] = useState<string | null>(null)
-
-  const showToast = (msg: string) => {
-    setToastMsg(msg)
-  }
-
-  const copyEmail = () => {
-    navigator.clipboard.writeText(site.email)
-    showToast(`✓ Copied email: ${site.email}`)
-  }
-
-  const copyPhone = () => {
-    navigator.clipboard.writeText(site.phone)
-    showToast(`✓ Copied phone: ${site.phone}`)
-  }
 
   useEffect(() => {
     if (matchMedia('(prefers-reduced-motion: reduce)').matches) return
@@ -1581,17 +1330,9 @@ function Portfolio() {
   return (
     <>
       <Preloader />
-      <Header
-        onOpenRecruiter={() => setRecruiterOpen(true)}
-        onOpenResume={() => setResumeOpen(true)}
-        onCopyEmail={copyEmail}
-      />
+      <Header onOpenResume={() => setResumeOpen(true)} />
       <main>
-        <Hero
-          onOpenRecruiter={() => setRecruiterOpen(true)}
-          onOpenResume={() => setResumeOpen(true)}
-          onCopyEmail={copyEmail}
-        />
+        <Hero onOpenResume={() => setResumeOpen(true)} />
         <About />
         <StackMarquee />
         <Projects />
@@ -1599,18 +1340,10 @@ function Portfolio() {
         <Lab />
         <Skillset />
         <Statement />
-        <ContactForm onCopyEmail={copyEmail} onCopyPhone={copyPhone} />
+        <ContactForm />
       </main>
       <Footer onOpenResume={() => setResumeOpen(true)} />
       <ResumeModal open={resumeOpen} onClose={() => setResumeOpen(false)} />
-      <RecruiterDossierModal
-        open={recruiterOpen}
-        onClose={() => setRecruiterOpen(false)}
-        onOpenResume={() => setResumeOpen(true)}
-        onCopyEmail={copyEmail}
-        onCopyPhone={copyPhone}
-      />
-      <Toast message={toastMsg} onClear={() => setToastMsg(null)} />
       <a className="custom-cursor" href="#home" aria-label="Back to top">
         ↑
       </a>

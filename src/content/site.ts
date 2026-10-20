@@ -205,11 +205,6 @@ export const site = {
       body: 'Designing transactional Spring Boot microservices with Flyway database migrations, Mockito unit mocking, and automated JUnit 5 test suites.',
       label: '02 / RELIABILITY',
     },
-    {
-      title: 'Algorithmic Problem Solving in C++',
-      body: '100+ problems solved on LeetCode focusing on space-time complexity analysis, cache-friendly data structures, and optimal algorithmic paradigms.',
-      label: '03 / FOUNDATIONS',
-    },
   ],
   skills: [
     { title: 'AI & Autonomous Systems', body: 'LangChain, LangGraph, Gemini API, Groq, Multi-Agent State Machines, Deterministic Fallbacks' },
