@@ -107,8 +107,8 @@ export const site = {
       status: 'VERIFIED REPO',
       repoUrl: 'https://github.com/tanmayyyyayyy/SkillForge-AI',
       liveUrl: '',
-      image: '/projects/kairova.jpg',
-      imageAlt: 'SkillForge AI career readiness scoring engine',
+      image: '/projects/skillforge-ai.jpg',
+      imageAlt: 'SkillForge AI career readiness scoring engine and learning roadmap',
       isPlaceholder: false,
     },
     {
@@ -123,8 +123,8 @@ export const site = {
       status: 'HACKATHON WINNER',
       repoUrl: 'https://github.com/tanmayyyyayyy/Codex',
       liveUrl: '',
-      image: '/projects/micro-culture.jpg',
-      imageAlt: 'GuardSaaB AI Agent Governance Platform',
+      image: '/projects/guardsaab.jpg',
+      imageAlt: 'GuardSaaB AI Agent Governance Platform dashboard',
       isPlaceholder: false,
     },
     {
