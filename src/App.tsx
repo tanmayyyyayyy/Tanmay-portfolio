@@ -1,10 +1,19 @@
 import { useEffect, useRef, useState, type FormEvent, type SyntheticEvent } from 'react'
 import { Route, Routes, useNavigate, useParams } from 'react-router-dom'
-import { ArrowDown, ArrowRight, ArrowUpRight, Menu, X, Award, Cpu, Terminal, Shield } from 'lucide-react'
+import {
+  ArrowDown, ArrowRight, ArrowUpRight, Menu, X, Award, Cpu, Terminal, Shield,
+  Copy, FileText, Download, Phone, Mail, ExternalLink, Sparkles,
+  GraduationCap, CheckCircle2
+} from 'lucide-react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import Lenis from 'lenis'
-import { siCplusplus, siPython, siJavascript, siTypescript, siOpenjdk, siReact, siVite, siTailwindcss, siHtml5, siCss, siNodedotjs, siExpress, siFastapi, siMongodb, siPostgresql, siSpringboot, siLangchain, siLanggraph, siGoogle, siFirebase, siGooglecloud } from 'simple-icons'
+import {
+  siCplusplus, siPython, siJavascript, siTypescript, siOpenjdk, siReact, siVite,
+  siTailwindcss, siHtml5, siCss, siNodedotjs, siExpress, siFastapi, siMongodb,
+  siPostgresql, siSpringboot, siLangchain, siLanggraph, siGoogle, siFirebase,
+  siGooglecloud
+} from 'simple-icons'
 import { site, asset } from './content/site'
 
 gsap.registerPlugin(ScrollTrigger)
@@ -13,24 +22,270 @@ function Preloader() {
   const [visible, setVisible] = useState(!sessionStorage.getItem('intro-seen'))
   useEffect(() => {
     if (!visible) return
-    const timer = window.setTimeout(() => { setVisible(false); sessionStorage.setItem('intro-seen', '1') }, 2400)
+    const timer = window.setTimeout(() => {
+      setVisible(false)
+      sessionStorage.setItem('intro-seen', '1')
+    }, 2400)
     return () => window.clearTimeout(timer)
   }, [visible])
   if (!visible) return null
-  return <div className="preloader" aria-label="Tanmay Jain portfolio intro"><div className="preload-mark"><span>TAN</span><span className="preload-photo"><ResponsiveImage path={site.profile.photo} alt="" width={1350} height={1688} loading="eager" sizes="20vw"/></span><span>MAY</span></div><span className="micro">AI / ML + FULL-STACK DEVELOPER</span></div>
+  return (
+    <div className="preloader" aria-label="Tanmay Jain portfolio intro">
+      <div className="preload-mark">
+        <span>TAN</span>
+        <span className="preload-photo">
+          <ResponsiveImage path={site.profile.photo} alt="" width={1350} height={1688} loading="eager" sizes="20vw" />
+        </span>
+        <span>MAY</span>
+      </div>
+      <span className="micro">AI / ML + FULL-STACK DEVELOPER</span>
+    </div>
+  )
 }
 
-function hideMissingImage(event: SyntheticEvent<HTMLImageElement>) { event.currentTarget.classList.add('image-missing') }
-
-function ResponsiveImage({ path, alt, width, height, sizes = '100vw', loading = 'lazy', className = '', fetchPriority }: { path: string; alt: string; width: number; height: number; sizes?: string; loading?: 'eager' | 'lazy'; className?: string; fetchPriority?: 'high' }) {
-  const variants = [480, 800, 1200].map(size => `${asset(path.replace(/\.jpe?g$/i, `-${size}.webp`))} ${size}w`).join(', ')
-  return <picture className="responsive-picture"><source type="image/webp" srcSet={variants} sizes={sizes}/><img className={className} src={asset(path)} alt={alt} width={width} height={height} loading={loading} decoding="async" fetchPriority={fetchPriority} onError={hideMissingImage}/></picture>
+function hideMissingImage(event: SyntheticEvent<HTMLImageElement>) {
+  event.currentTarget.classList.add('image-missing')
 }
 
-function Header() {
+function ResponsiveImage({
+  path, alt, width, height, sizes = '100vw', loading = 'lazy', className = '', fetchPriority
+}: {
+  path: string; alt: string; width: number; height: number; sizes?: string;
+  loading?: 'eager' | 'lazy'; className?: string; fetchPriority?: 'high'
+}) {
+  const variants = [480, 800, 1200]
+    .map(size => `${asset(path.replace(/\.jpe?g$/i, `-${size}.webp`))} ${size}w`)
+    .join(', ')
+  return (
+    <picture className="responsive-picture">
+      <source type="image/webp" srcSet={variants} sizes={sizes} />
+      <img
+        className={className}
+        src={asset(path)}
+        alt={alt}
+        width={width}
+        height={height}
+        loading={loading}
+        decoding="async"
+        fetchPriority={fetchPriority}
+        onError={hideMissingImage}
+      />
+    </picture>
+  )
+}
+
+function Toast({ message, onClear }: { message: string | null; onClear: () => void }) {
+  useEffect(() => {
+    if (!message) return
+    const timer = window.setTimeout(onClear, 2800)
+    return () => window.clearTimeout(timer)
+  }, [message, onClear])
+  if (!message) return null
+  return (
+    <div className="toast-bar" role="status" aria-live="polite">
+      <CheckCircle2 size={16} color="#10b981" />
+      <span>{message}</span>
+    </div>
+  )
+}
+
+function ResumeModal({ open, onClose }: { open: boolean; onClose: () => void }) {
+  useEffect(() => {
+    if (!open) return
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose() }
+    document.addEventListener('keydown', onKey)
+    return () => document.removeEventListener('keydown', onKey)
+  }, [open, onClose])
+
+  if (!open) return null
+
+  return (
+    <div className="modal-overlay" onClick={onClose} role="dialog" aria-modal="true" aria-label="Resume Preview">
+      <div className="modal-container" onClick={e => e.stopPropagation()}>
+        <div className="modal-header">
+          <div className="modal-title-group">
+            <FileText size={18} color="var(--red)" />
+            <h3 className="modal-title">Tanmay Jain — Official Resume (2026)</h3>
+            <span className="modal-tag">9.04 CGPA · JECRC</span>
+          </div>
+          <div className="modal-actions">
+            <a className="modal-btn" href={asset('/resume.pdf')} target="_blank" rel="noreferrer" title="Open PDF in new tab">
+              <ExternalLink size={13} />
+              <span className="hide-mobile">Open Tab</span>
+            </a>
+            <a className="modal-btn primary" href={asset('/resume.pdf')} download="Tanmay_Jain_Resume.pdf" title="Download Resume">
+              <Download size={13} />
+              <span>Download PDF</span>
+            </a>
+            <button className="modal-close-btn" onClick={onClose} aria-label="Close modal">
+              <X size={18} />
+            </button>
+          </div>
+        </div>
+        <div className="modal-body">
+          <div className="resume-frame-wrap">
+            <iframe
+              src={`${asset('/resume.pdf')}#toolbar=1&navpanes=0`}
+              className="resume-frame"
+              title="Tanmay Jain Resume"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function RecruiterDossierModal({
+  open, onClose, onOpenResume, onCopyEmail, onCopyPhone
+}: {
+  open: boolean;
+  onClose: () => void;
+  onOpenResume: () => void;
+  onCopyEmail: () => void;
+  onCopyPhone: () => void;
+}) {
+  useEffect(() => {
+    if (!open) return
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose() }
+    document.addEventListener('keydown', onKey)
+    return () => document.removeEventListener('keydown', onKey)
+  }, [open, onClose])
+
+  if (!open) return null
+
+  return (
+    <div className="modal-overlay" onClick={onClose} role="dialog" aria-modal="true" aria-label="Recruiter Fast-Track Dossier">
+      <div className="modal-container" onClick={e => e.stopPropagation()}>
+        <div className="modal-header">
+          <div className="modal-title-group">
+            <Sparkles size={18} color="var(--red)" />
+            <h3 className="modal-title">Recruiter Fast-Track // Executive Dossier</h3>
+            <span className="modal-tag">AVAILABLE FOR ROLES</span>
+          </div>
+          <div className="modal-actions">
+            <button className="modal-btn primary" onClick={() => { onClose(); onOpenResume() }}>
+              <FileText size={13} />
+              <span>Preview Resume</span>
+            </button>
+            <button className="modal-close-btn" onClick={onClose} aria-label="Close modal">
+              <X size={18} />
+            </button>
+          </div>
+        </div>
+
+        <div className="modal-body">
+          <div className="dossier-grid">
+            <div className="dossier-card featured">
+              <span className="dossier-card-label">
+                <GraduationCap size={13} color="var(--red)" />
+                EDUCATION & ACADEMICS
+              </span>
+              <div className="dossier-card-value">B.Tech CSE (AI & ML) · 9.04 / 10 CGPA</div>
+              <p className="dossier-card-desc">
+                JECRC University, Jaipur (Class of 2028). Strong foundations in Data Structures, Algorithms, DBMS, Operating Systems, and AI systems.
+              </p>
+            </div>
+
+            <div className="dossier-card featured">
+              <span className="dossier-card-label">
+                <Award size={13} color="var(--red)" />
+                COMPETITIVE EXCELLENCE
+              </span>
+              <div className="dossier-card-value">1st Runner-Up · CodeX 3.0 Hackathon</div>
+              <p className="dossier-card-desc">
+                Ranked in top 1% among 100 teams (₹40,000 cash prize). Engineered GuardSaaB — an AI agent governance engine with permission enforcement.
+              </p>
+            </div>
+
+            <div className="dossier-card">
+              <span className="dossier-card-label">
+                <Terminal size={13} />
+                SOFTWARE RELIABILITY
+              </span>
+              <div className="dossier-card-value">365+ Automated Tests Written</div>
+              <p className="dossier-card-desc">
+                Vitest & JUnit 5 test suites across 32 suites. Zero untested logic, automated API quota fallback mechanisms (HTTP 429), and robust error handling.
+              </p>
+            </div>
+
+            <div className="dossier-card">
+              <span className="dossier-card-label">
+                <Cpu size={13} />
+                ALGORITHMIC PROBLEM SOLVING
+              </span>
+              <div className="dossier-card-value">100+ Solved in C++ (LeetCode & GFG)</div>
+              <p className="dossier-card-desc">
+                Consistent algorithmic focus on optimal time-space complexity, trees, graphs, sorting, and dynamic programming.
+              </p>
+            </div>
+          </div>
+
+          <div className="dossier-stack-group">
+            <div className="dossier-stack-title">// VERIFIED PRODUCTION CAPABILITIES</div>
+            <div className="dossier-pills">
+              {site.stack.map(tech => (
+                <span key={tech} className="dossier-pill">{tech}</span>
+              ))}
+            </div>
+          </div>
+
+          <div className="dossier-stack-group">
+            <div className="dossier-stack-title">// CANDIDATE LOGISTICS & AVAILABILITY</div>
+            <p style={{ fontSize: '12px', color: '#ccc', margin: '0 0 10px', lineHeight: 1.5 }}>
+              • <strong>Target Roles:</strong> AI/ML Engineer, Full-Stack Developer, Software Engineer, Backend Developer<br />
+              • <strong>Availability:</strong> Summer 2025/2026 Internships & Full-Time Graduating Roles<br />
+              • <strong>Work Authorization:</strong> India (Open to Relocation: Bangalore, Delhi/NCR, Hyderabad, Pune, Mumbai, Worldwide, & Remote)
+            </p>
+          </div>
+
+          <div className="dossier-contact-bar">
+            <div className="dossier-contact-info">
+              <span className="dossier-contact-item">
+                <Mail size={13} color="var(--red)" />
+                {site.email}
+              </span>
+              <span className="dossier-contact-item">
+                <Phone size={13} color="#10b981" />
+                {site.phone}
+              </span>
+            </div>
+            <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+              <button className="modal-btn" onClick={onCopyEmail}>
+                <Copy size={12} />
+                <span>Copy Email</span>
+              </button>
+              <button className="modal-btn" onClick={onCopyPhone}>
+                <Phone size={12} />
+                <span>Copy Phone</span>
+              </button>
+              <a className="modal-btn" href={site.links.linkedin} target="_blank" rel="noreferrer">
+                <span>LinkedIn</span>
+                <ArrowUpRight size={12} />
+              </a>
+              <a className="modal-btn" href={site.links.github} target="_blank" rel="noreferrer">
+                <span>GitHub</span>
+                <ArrowUpRight size={12} />
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function Header({
+  onOpenRecruiter, onOpenResume, onCopyEmail
+}: {
+  onOpenRecruiter: () => void;
+  onOpenResume: () => void;
+  onCopyEmail: () => void;
+}) {
   const [open, setOpen] = useState(false)
   const toggleRef = useRef<HTMLButtonElement>(null)
   const close = () => setOpen(false)
+
   useEffect(() => {
     if (!open) return
     document.querySelector<HTMLElement>('.menu-overlay a')?.focus()
@@ -46,12 +301,179 @@ function Header() {
     document.addEventListener('keydown', onKey)
     return () => document.removeEventListener('keydown', onKey)
   }, [open])
-  const items = [['Work', '#projects'], ['About', '#about'], ['Skills', '#skills'], ['Lab', '#lab'], ['Contact', '#contact']]
-  return <><header className="header"><a className="brand" href="#home" onClick={close}>TANMAY.JAIN<sup>®</sup></a><span className="header-location">AI / ML + FULL-STACK · JAIPUR, IN</span><button ref={toggleRef} className="menu-toggle" onClick={() => setOpen(!open)} aria-expanded={open} aria-label={open ? 'Close menu' : 'Open menu'}>{open ? <X/> : <Menu/>}<span>{open ? 'CLOSE' : 'MENU'}</span></button></header>{open && <nav className="menu-overlay" aria-label="Main menu">{items.map(([name, href], i) => <a style={{ transitionDelay: `${i * 65}ms` }} href={href} key={name} onClick={close}><small>0{i + 1}</small>{name}<ArrowUpRight/></a>)}<div className="menu-foot micro">JAIPUR, INDIA · AVAILABLE FOR WHAT'S NEXT</div></nav>}</>
+
+  const items = [
+    ['Work', '#projects'],
+    ['About', '#about'],
+    ['Skills', '#skills'],
+    ['Honors', '#credentials'],
+    ['Architecture', '#manifesto'],
+    ['Contact', '#contact']
+  ]
+
+  return (
+    <>
+      <header className="header">
+        <a className="brand" href="#home" onClick={close}>
+          TANMAY.JAIN<sup>®</sup>
+        </a>
+
+        <div className="header-actions">
+          <button
+            type="button"
+            className="header-pill-btn accent"
+            onClick={onOpenRecruiter}
+            title="Open 30-second recruiter executive briefing"
+          >
+            <span className="pulse-dot" />
+            <span>RECRUITER BRIEF</span>
+          </button>
+
+          <button
+            type="button"
+            className="header-pill-btn"
+            onClick={onOpenResume}
+            title="Preview verified resume PDF"
+          >
+            <FileText size={12} />
+            <span className="hide-mobile">RESUME</span>
+          </button>
+
+          <button
+            type="button"
+            className="header-pill-btn"
+            onClick={onCopyEmail}
+            title="Copy email to clipboard"
+          >
+            <Copy size={12} />
+            <span className="hide-mobile">COPY EMAIL</span>
+          </button>
+
+          <button
+            ref={toggleRef}
+            className="menu-toggle"
+            onClick={() => setOpen(!open)}
+            aria-expanded={open}
+            aria-label={open ? 'Close menu' : 'Open menu'}
+          >
+            {open ? <X /> : <Menu />}
+            <span>{open ? 'CLOSE' : 'MENU'}</span>
+          </button>
+        </div>
+      </header>
+
+      {open && (
+        <nav className="menu-overlay" aria-label="Main menu">
+          {items.map(([name, href], i) => (
+            <a style={{ transitionDelay: `${i * 60}ms` }} href={href} key={name} onClick={close}>
+              <small>0{i + 1}</small>
+              {name}
+              <ArrowUpRight />
+            </a>
+          ))}
+          <div className="menu-foot micro">
+            JAIPUR, INDIA · 9.04 CGPA · OPEN TO ROLES WORLDWIDE
+          </div>
+        </nav>
+      )}
+    </>
+  )
 }
 
-function Hero() {
-  return <section className="hero section-pad" id="home"><div className="hero-copy"><p className="eyebrow"><span className="red-dot"/> OPEN TO WORK <span className="eyebrow-sep">/</span> {site.location}</p><h1>Tanmay<br/><span>Jain</span></h1><p className="hero-role">AI/ML Developer <i>•</i> Full-Stack Developer <i>•</i> Builder</p><p className="hero-intro">{site.intro}</p><div className="chips">{['AI/ML', 'Full-Stack', 'Agentic AI', 'Product Building'].map(x => <span key={x}>{x}</span>)}</div><div className="hero-actions"><a className="button button-dark" href="#projects">EXPLORE WORK <ArrowRight/></a>{site.profile.resume && <a className="button button-outline" href={asset(site.profile.resume)} target="_blank" rel="noreferrer">DOWNLOAD RESUME <ArrowRight/></a>}</div></div><div className="hero-image"><ResponsiveImage path={site.profile.photo} alt="Portrait of Tanmay Jain" width={1350} height={1688} loading="eager" className="hero-photo" fetchPriority="high" sizes="(max-width: 850px) 45vw, 42vw"/><span className="image-caption">01 — TANMAY JAIN / JAIPUR</span></div><a className="scroll-cue" href="#about"><ArrowDown/> SCROLL TO EXPLORE</a>{site.openToWorkTab && <a className="work-tab" href="#contact">OPEN TO WORK</a>}</section>
+function Hero({
+  onOpenRecruiter, onOpenResume, onCopyEmail
+}: {
+  onOpenRecruiter: () => void;
+  onOpenResume: () => void;
+  onCopyEmail: () => void;
+}) {
+  return (
+    <section className="hero section-pad" id="home">
+      <div className="hero-copy">
+        <p className="eyebrow">
+          <span className="red-dot" /> OPEN TO WORK <span className="eyebrow-sep">/</span> 9.04 CGPA @ JECRC UNIVERSITY
+        </p>
+        <h1>
+          Tanmay<br />
+          <span>Jain</span>
+        </h1>
+        <p className="hero-role">AI/ML Engineer <i>•</i> Full-Stack Developer <i>•</i> Systems Builder</p>
+        <p className="hero-intro">{site.intro}</p>
+
+        <div className="hero-recruiter-card">
+          <div className="hero-recruiter-header">
+            <span className="hero-recruiter-title">
+              <Sparkles size={13} />
+              RECRUITER SUMMARY // FAST-TRACK
+            </span>
+            <span className="hero-recruiter-status">
+              <span className="pulse-dot" />
+              AVAILABLE FOR HIRE (INTERNSHIP & FULL-TIME)
+            </span>
+          </div>
+
+          <div className="hero-recruiter-pills">
+            <span className="recruiter-pill-badge highlight">
+              <strong>9.04 / 10 CGPA</strong> (B.Tech AI & ML)
+            </span>
+            <span className="recruiter-pill-badge highlight">
+              <strong>1st Runner-Up</strong> CodeX 3.0 Hackathon (₹40k Prize)
+            </span>
+            <span className="recruiter-pill-badge">
+              <strong>365+</strong> Automated Tests (Vitest & JUnit 5)
+            </span>
+            <span className="recruiter-pill-badge">
+              <strong>100+</strong> DSA in C++ (LeetCode)
+            </span>
+          </div>
+        </div>
+
+        <div className="chips">
+          {['LangGraph', 'Java 21 / Spring Boot', 'React 18 & TypeScript', 'Docker', 'REST APIs', 'Multi-Agent AI'].map(x => (
+            <span key={x}>{x}</span>
+          ))}
+        </div>
+
+        <div className="hero-actions">
+          <a className="button button-dark" href="#projects">
+            EXPLORE WORK <ArrowRight />
+          </a>
+          <button type="button" className="button button-outline" onClick={onOpenResume}>
+            PREVIEW RESUME <FileText size={14} style={{ marginLeft: 6 }} />
+          </button>
+          <button type="button" className="button button-outline" onClick={onOpenRecruiter}>
+            30-SEC BRIEF <Sparkles size={14} style={{ marginLeft: 6 }} />
+          </button>
+          <button type="button" className="button button-outline" onClick={onCopyEmail}>
+            COPY EMAIL <Copy size={13} style={{ marginLeft: 6 }} />
+          </button>
+        </div>
+      </div>
+
+      <div className="hero-image">
+        <ResponsiveImage
+          path={site.profile.photo}
+          alt="Portrait of Tanmay Jain"
+          width={1350}
+          height={1688}
+          loading="eager"
+          className="hero-photo"
+          fetchPriority="high"
+          sizes="(max-width: 850px) 45vw, 42vw"
+        />
+        <span className="image-caption">01 — TANMAY JAIN / 9.04 CGPA / JAIPUR</span>
+      </div>
+
+      <a className="scroll-cue" href="#about">
+        <ArrowDown /> SCROLL TO EXPLORE
+      </a>
+      {site.openToWorkTab && (
+        <button type="button" className="work-tab" onClick={onOpenRecruiter}>
+          OPEN TO WORK
+        </button>
+      )}
+    </section>
+  )
 }
 
 function About() {
@@ -62,10 +484,38 @@ function About() {
     const words = site.about.split(' ')
     el.innerHTML = words.map(word => `<span class="reveal-word">${word} </span>`).join('')
     const spans = el.querySelectorAll('.reveal-word')
-    gsap.fromTo(spans, { color: '#c2beb5' }, { color: '#080808', stagger: 0.035, ease: 'none', scrollTrigger: { trigger: el, start: 'top 78%', end: `+=${Math.max(el.offsetHeight * 1.45, 600)}`, scrub: true } })
+    gsap.fromTo(
+      spans,
+      { color: '#c2beb5' },
+      {
+        color: '#080808',
+        stagger: 0.035,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: el,
+          start: 'top 78%',
+          end: `+=${Math.max(el.offsetHeight * 1.45, 600)}`,
+          scrub: true,
+        },
+      }
+    )
     return () => { ScrollTrigger.getAll().forEach(t => t.trigger === el && t.kill()) }
   }, [])
-  return <section className="about section-pad" id="about"><div className="section-head"><span className="micro">01 / A LITTLE ABOUT ME</span><span className="micro">STUDENT · BUILDER · JAIPUR</span></div><div className="about-content"><div className="tilt-note"><ResponsiveImage path={site.profile.photo} alt="Tanmay Jain" width={1350} height={1688} sizes="15vw"/></div><p ref={ref}>{site.about}</p></div></section>
+
+  return (
+    <section className="about section-pad" id="about">
+      <div className="section-head">
+        <span className="micro">01 / A LITTLE ABOUT ME</span>
+        <span className="micro">9.04 CGPA · HACKATHON WINNER · JAIPUR</span>
+      </div>
+      <div className="about-content">
+        <div className="tilt-note">
+          <ResponsiveImage path={site.profile.photo} alt="Tanmay Jain" width={1350} height={1688} sizes="15vw" />
+        </div>
+        <p ref={ref}>{site.about}</p>
+      </div>
+    </section>
+  )
 }
 
 function StackMarquee() {
@@ -75,31 +525,327 @@ function StackMarquee() {
     const timer = window.setInterval(() => setThumb(value => (value + 1) % site.projects.length), 2400)
     return () => window.clearInterval(timer)
   }, [])
-  const icons = [siCplusplus,siPython,siJavascript,siTypescript,siOpenjdk,siReact,siVite,siTailwindcss,siHtml5,siCss,siNodedotjs,siExpress,siFastapi,siMongodb,siPostgresql,siSpringboot,siLangchain,siLanggraph,siGoogle,siFirebase,siGooglecloud]
-  const labels = ['C++','Python','JavaScript','TypeScript','Java','React','Vite','Tailwind','HTML5','CSS3','Node.js','Express','FastAPI','MongoDB','PostgreSQL','Spring Boot','LangChain','LangGraph','Gemini','Firebase','Google Cloud']
+  const icons = [
+    siCplusplus, siPython, siJavascript, siTypescript, siOpenjdk, siReact, siVite,
+    siTailwindcss, siHtml5, siCss, siNodedotjs, siExpress, siFastapi, siMongodb,
+    siPostgresql, siSpringboot, siLangchain, siLanggraph, siGoogle, siFirebase,
+    siGooglecloud
+  ]
+  const labels = [
+    'C++', 'Python', 'JavaScript', 'TypeScript', 'Java', 'React', 'Vite', 'Tailwind',
+    'HTML5', 'CSS3', 'Node.js', 'Express', 'FastAPI', 'MongoDB', 'PostgreSQL',
+    'Spring Boot', 'LangChain', 'LangGraph', 'Gemini', 'Firebase', 'Google Cloud'
+  ]
   const items = labels.map((name, i) => ({ name, path: icons[i].path }))
-  const row = (list: typeof items) => [...list, ...list].map((item, i) => <span className="tech-item" key={`${item.name}-${i}`}><svg viewBox="0 0 24 24" aria-hidden="true"><path d={item.path}/></svg>{item.name}</span>)
-  return <section className="stack-strip"><div className="stack-label"><span className={`stack-thumb thumb-${thumb}`}><ResponsiveImage key={thumb} path={site.projects[thumb].image} alt="" width={1600} height={1000} sizes="65px"/><b>{site.projects[thumb].name}</b></span><span className="micro">(STACK & TOOLS)</span></div><div className="marquee" aria-label="Technology stack"><div>{row(items)}</div><div>{row(items.slice().reverse())}</div></div></section>
+  const row = (list: typeof items) =>
+    [...list, ...list].map((item, i) => (
+      <span className="tech-item" key={`${item.name}-${i}`}>
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d={item.path} />
+        </svg>
+        {item.name}
+      </span>
+    ))
+  return (
+    <section className="stack-strip">
+      <div className="stack-label">
+        <span className={`stack-thumb thumb-${thumb}`}>
+          <ResponsiveImage
+            key={thumb}
+            path={site.projects[thumb].image}
+            alt=""
+            width={1600}
+            height={1000}
+            sizes="65px"
+          />
+          <b>{site.projects[thumb].name}</b>
+        </span>
+        <span className="micro">(ENTERPRISE & AI STACK)</span>
+      </div>
+      <div className="marquee" aria-label="Technology stack">
+        <div>{row(items)}</div>
+        <div>{row(items.slice().reverse())}</div>
+      </div>
+    </section>
+  )
 }
 
 function Projects() {
   const [active, setActive] = useState(0)
+  const [categoryFilter, setCategoryFilter] = useState<'all' | 'ai' | 'backend' | 'fullstack'>('all')
   const navigate = useNavigate()
-  return <section className="projects section-pad" id="projects"><div className="section-head"><span className="micro">02 / SELECTED WORK</span><span className="micro">2024 — 2026</span></div><h2 className="section-title">Selected<br/><span>Projects</span><sup> ({site.projects.length})</sup></h2><div className="project-list">{site.projects.map((p, i) => <article className={`project-row ${active === i ? 'active' : ''}`} key={p.name} onMouseEnter={() => setActive(i)} onFocus={() => setActive(i)}><button className="project-main" onClick={() => setActive(i)} aria-expanded={active === i}><span className="project-number">0{i + 1}</span><span className="project-name">{p.name}</span><ArrowUpRight/></button><div className="project-detail"><p>{p.description}</p><div className="project-meta"><div><small>STACK</small><span>{p.stack}</span></div><div><small>TYPE</small><span>{p.type}</span></div>{[p.year,p.status].filter(x => !/^TODO/i.test(x)).length > 0 && <div><small>YEAR / STATUS</small><span>{[p.year,p.status].filter(x => !/^TODO/i.test(x)).join(' · ')}</span></div>}<div className="project-actions"><button className="button button-outline" onClick={() => navigate(`/project/${p.name.toLowerCase().replace(/\s+/g, '-')}`)}>PROJECT DETAILS <ArrowRight/></button>{p.repoUrl.startsWith('http') && <a className="button button-outline" href={p.repoUrl} target="_blank" rel="noreferrer">VIEW REPOSITORY <ArrowRight/></a>}{p.liveUrl.startsWith('http') && <a className="button button-outline" href={p.liveUrl} target="_blank" rel="noreferrer">LIVE <ArrowRight/></a>}</div></div><div className={`project-placeholder project-art art-${i}`}><ResponsiveImage path={p.image} alt={p.imageAlt} width={1600} height={1000} sizes="(max-width: 600px) 88vw, 28vw"/><strong>{p.name}</strong><small>{p.type}</small></div></div></article>)}</div></section>
+
+  const filteredProjects = categoryFilter === 'all'
+    ? site.projects
+    : site.projects.filter(p => p.category === categoryFilter)
+
+  const counts = {
+    all: site.projects.length,
+    ai: site.projects.filter(p => p.category === 'ai').length,
+    backend: site.projects.filter(p => p.category === 'backend').length,
+    fullstack: site.projects.filter(p => p.category === 'fullstack').length,
+  }
+
+  return (
+    <section className="projects section-pad" id="projects">
+      <div className="section-head">
+        <span className="micro">02 / SELECTED WORK & CASE STUDIES</span>
+        <span className="micro">TEST-DRIVEN & PRODUCTION-GRADE</span>
+      </div>
+
+      <h2 className="section-title">
+        Selected<br />
+        <span>Projects</span><sup> ({filteredProjects.length})</sup>
+      </h2>
+
+      <div className="project-filters" role="tablist" aria-label="Filter projects by discipline">
+        <button
+          type="button"
+          className={`filter-tab ${categoryFilter === 'all' ? 'active' : ''}`}
+          onClick={() => { setCategoryFilter('all'); setActive(0) }}
+        >
+          All Domains <span className="filter-count">({counts.all})</span>
+        </button>
+        <button
+          type="button"
+          className={`filter-tab ${categoryFilter === 'ai' ? 'active' : ''}`}
+          onClick={() => { setCategoryFilter('ai'); setActive(0) }}
+        >
+          <Cpu size={12} /> AI & Agentic <span className="filter-count">({counts.ai})</span>
+        </button>
+        <button
+          type="button"
+          className={`filter-tab ${categoryFilter === 'backend' ? 'active' : ''}`}
+          onClick={() => { setCategoryFilter('backend'); setActive(0) }}
+        >
+          <Terminal size={12} /> Enterprise & Java <span className="filter-count">({counts.backend})</span>
+        </button>
+        <button
+          type="button"
+          className={`filter-tab ${categoryFilter === 'fullstack' ? 'active' : ''}`}
+          onClick={() => { setCategoryFilter('fullstack'); setActive(0) }}
+        >
+          Full-Stack Web <span className="filter-count">({counts.fullstack})</span>
+        </button>
+      </div>
+
+      <div className="project-list">
+        {filteredProjects.map((p, i) => (
+          <article
+            className={`project-row ${active === i ? 'active' : ''}`}
+            key={p.name}
+            onMouseEnter={() => setActive(i)}
+            onFocus={() => setActive(i)}
+          >
+            <button
+              className="project-main"
+              onClick={() => setActive(i)}
+              aria-expanded={active === i}
+            >
+              <span className="project-number">0{i + 1}</span>
+              <span className="project-name">{p.name}</span>
+              <span style={{ fontSize: '11px', fontFamily: 'monospace', color: 'var(--red)', marginLeft: '12px' }}>
+                [{p.badge}]
+              </span>
+              <ArrowUpRight />
+            </button>
+
+            <div className="project-detail">
+              <p>{p.description}</p>
+              <div className="project-meta">
+                <div>
+                  <small>STACK</small>
+                  <span>{p.stack}</span>
+                </div>
+                <div>
+                  <small>DOMAIN / HIGHLIGHT</small>
+                  <span style={{ color: 'var(--red)', fontWeight: 600 }}>{p.highlightMetric}</span>
+                </div>
+                <div>
+                  <small>STATUS</small>
+                  <span>{p.status}</span>
+                </div>
+                <div className="project-actions">
+                  <button
+                    className="button button-outline"
+                    onClick={() => navigate(`/project/${p.name.toLowerCase().replace(/\s+/g, '-')}`)}
+                  >
+                    PROJECT DETAILS <ArrowRight />
+                  </button>
+                  {p.repoUrl && p.repoUrl.startsWith('http') && (
+                    <a className="button button-outline" href={p.repoUrl} target="_blank" rel="noreferrer">
+                      VIEW CODE <ArrowUpRight />
+                    </a>
+                  )}
+                  {p.liveUrl && p.liveUrl.startsWith('http') && (
+                    <a className="button button-outline" href={p.liveUrl} target="_blank" rel="noreferrer">
+                      LIVE DEMO <ArrowUpRight />
+                    </a>
+                  )}
+                </div>
+              </div>
+              <div className={`project-placeholder project-art art-${i}`}>
+                <ResponsiveImage
+                  path={p.image}
+                  alt={p.imageAlt}
+                  width={1600}
+                  height={1000}
+                  sizes="(max-width: 600px) 88vw, 28vw"
+                />
+                <strong>{p.name}</strong>
+                <small>{p.type}</small>
+              </div>
+            </div>
+          </article>
+        ))}
+      </div>
+    </section>
+  )
+}
+
+function Credentials() {
+  return (
+    <section className="credentials section-pad" id="credentials">
+      <div className="section-head">
+        <span className="micro">03 / HONORS, ACADEMICS & CERTIFICATIONS</span>
+        <span className="micro">VERIFIED TRACK RECORD</span>
+      </div>
+
+      <h2 className="section-title">
+        Achievements<br />
+        <span>& Credentials</span>
+      </h2>
+
+      <div className="credentials-grid">
+        {site.achievements.map((ach) => (
+          <article className="credential-card" key={ach.title}>
+            <span className="credential-tag">{ach.tag}</span>
+            <h3 className="credential-title">{ach.title}</h3>
+            <span className="credential-sub">{ach.subtitle}</span>
+            <p className="credential-desc">{ach.details}</p>
+            <div className="credential-badge">{ach.metric}</div>
+          </article>
+        ))}
+      </div>
+
+      <div className="certifications-section">
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', flexWrap: 'wrap', gap: 10 }}>
+          <span className="micro" style={{ color: 'var(--red)', fontWeight: 700 }}>
+            INDUSTRY CERTIFICATIONS
+          </span>
+          <span className="micro">AWS · SAMATRIX · ACCENTURE</span>
+        </div>
+
+        <div className="cert-grid">
+          {site.certifications.map((cert) => (
+            <div className="cert-card" key={cert.name}>
+              <span className="cert-issuer">{cert.issuer}</span>
+              <strong className="cert-name">{cert.name}</strong>
+              <div className="cert-meta">
+                <span>{cert.date}</span>
+                <span className="cert-badge">{cert.badge}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
 }
 
 function Lab() {
-  return <section className="lab section-pad" id="lab"><div className="section-head"><span className="micro">03 / CURIOSITY IN PRACTICE</span><span className="micro">LEARNING NEVER SHIPS LAST</span></div><h2 className="section-title">The <span>Lab</span></h2><div className="lab-grid">{site.lab.map((item, i) => <article className="lab-card" key={item.title}><div className={`lab-graphic graphic-${i}`} aria-hidden="true"><div className={`lab-visual lab-visual-${i}`}>{i===0?<><span>INPUT</span><b>AGENT</b><span>TOOLS</span><b>OUTPUT</b></>:<><span>01&nbsp; vector&lt;int&gt;</span><span>02&nbsp; sort(nums)</span><span>03&nbsp; return result</span></>}</div><b>{item.label}</b></div><small className="micro">{item.label}</small><h3>{item.title}</h3><p>{item.body}</p></article>)}</div><div className="lab-links"><a className="button button-dark" href={site.links.github} target="_blank" rel="noreferrer">GITHUB <ArrowRight/></a><a className="button button-outline" href={site.links.leetcode} target="_blank" rel="noreferrer">LEETCODE <ArrowRight/></a></div></section>
+  return (
+    <section className="lab section-pad" id="lab">
+      <div className="section-head">
+        <span className="micro">04 / CURIOSITY IN PRACTICE</span>
+        <span className="micro">SYSTEMS THINKING & RIGOR</span>
+      </div>
+      <h2 className="section-title">
+        The <span>Lab</span>
+      </h2>
+      <div className="lab-grid">
+        {site.lab.map((item, i) => (
+          <article className="lab-card" key={item.title}>
+            <div className={`lab-graphic graphic-${i}`} aria-hidden="true">
+              <div className={`lab-visual lab-visual-${i}`}>
+                {i === 0 ? (
+                  <>
+                    <span>INPUT</span>
+                    <b>AGENT</b>
+                    <span>FALLBACK</span>
+                    <b>OUTPUT</b>
+                  </>
+                ) : i === 1 ? (
+                  <>
+                    <span>JAVA 21</span>
+                    <b>SPRING</b>
+                    <span>FLYWAY</span>
+                    <b>MOCKITO</b>
+                  </>
+                ) : (
+                  <>
+                    <span>01 vector&lt;int&gt;</span>
+                    <span>02 sort(nums)</span>
+                    <span>03 return result</span>
+                  </>
+                )}
+              </div>
+              <b>{item.label}</b>
+            </div>
+            <small className="micro">{item.label}</small>
+            <h3>{item.title}</h3>
+            <p>{item.body}</p>
+          </article>
+        ))}
+      </div>
+      <div className="lab-links">
+        <a className="button button-dark" href={site.links.github} target="_blank" rel="noreferrer">
+          GITHUB REPOSITORIES <ArrowRight />
+        </a>
+        <a className="button button-outline" href={site.links.leetcode} target="_blank" rel="noreferrer">
+          LEETCODE PROFILE <ArrowRight />
+        </a>
+      </div>
+    </section>
+  )
 }
 
 function Skillset() {
   const refs = useRef<HTMLDivElement>(null)
   useEffect(() => {
     if (!refs.current || matchMedia('(prefers-reduced-motion: reduce)').matches) return
-    const ctx = gsap.context(() => gsap.utils.toArray<HTMLElement>('.skill-row').forEach(row => ScrollTrigger.create({ trigger: row, start: 'top center', end: 'bottom center', onToggle: self => row.classList.toggle('in-view', self.isActive) })), refs)
+    const ctx = gsap.context(() =>
+      gsap.utils.toArray<HTMLElement>('.skill-row').forEach(row =>
+        ScrollTrigger.create({
+          trigger: row,
+          start: 'top center',
+          end: 'bottom center',
+          onToggle: self => row.classList.toggle('in-view', self.isActive),
+        })
+      ), refs)
     return () => ctx.revert()
   }, [])
-  return <section className="skillset section-pad" id="skills"><div className="section-head"><span className="micro">04 / WHAT I WORK WITH</span><span className="micro">TOOLS FOLLOW CURIOSITY</span></div><h2 className="section-title">Skillset<span>.</span></h2><div ref={refs} className="skill-rows">{site.skills.map((s, i) => <div className="skill-row" key={s.title}><span className="skill-index">0{i + 1}</span><h3>{s.title}</h3><p>{s.body}</p><ArrowUpRight/></div>)}</div></section>
+  return (
+    <section className="skillset section-pad" id="skills">
+      <div className="section-head">
+        <span className="micro">05 / WHAT I WORK WITH</span>
+        <span className="micro">COMPREHENSIVE SKILL MATRIX</span>
+      </div>
+      <h2 className="section-title">
+        Skillset<span>.</span>
+      </h2>
+      <div ref={refs} className="skill-rows">
+        {site.skills.map((s, i) => (
+          <div className="skill-row" key={s.title}>
+            <span className="skill-index">0{i + 1}</span>
+            <h3>{s.title}</h3>
+            <p>{s.body}</p>
+            <ArrowUpRight />
+          </div>
+        ))}
+      </div>
+    </section>
+  )
 }
 
 function ContactSky() {
@@ -116,11 +862,22 @@ function ContactSky() {
     observer.observe(el)
     return () => observer.disconnect()
   }, [])
-  return <div ref={ref} className="contact-cloud" aria-hidden="true">
-    {near && __HAS_SKY_POSTER__ && <img className="sky-poster" src={asset('/sky.jpg')} alt="" width="1920" height="1080" loading="lazy" decoding="async" onError={hideMissingImage}/>}
-    {near && __HAS_SKY_VIDEO__ && !reduceMotion && !videoFailed && <video className="sky-video" autoPlay muted loop playsInline preload="none" poster={__HAS_SKY_POSTER__ ? asset('/sky.jpg') : undefined} onError={() => setVideoFailed(true)}><source src={asset('/sky.mp4')} type="video/mp4"/></video>}
-    <i className="sky-cloud sky-cloud-one"/><i className="sky-cloud sky-cloud-two"/><i className="sky-cloud sky-cloud-three"/><i className="sky-cloud sky-cloud-four"/>
-  </div>
+  return (
+    <div ref={ref} className="contact-cloud" aria-hidden="true">
+      {near && __HAS_SKY_POSTER__ && (
+        <img className="sky-poster" src={asset('/sky.jpg')} alt="" width="1920" height="1080" loading="lazy" decoding="async" onError={hideMissingImage} />
+      )}
+      {near && __HAS_SKY_VIDEO__ && !reduceMotion && !videoFailed && (
+        <video className="sky-video" autoPlay muted loop playsInline preload="none" poster={__HAS_SKY_POSTER__ ? asset('/sky.jpg') : undefined} onError={() => setVideoFailed(true)}>
+          <source src={asset('/sky.mp4')} type="video/mp4" />
+        </video>
+      )}
+      <i className="sky-cloud sky-cloud-one" />
+      <i className="sky-cloud sky-cloud-two" />
+      <i className="sky-cloud sky-cloud-three" />
+      <i className="sky-cloud sky-cloud-four" />
+    </div>
+  )
 }
 
 function Statement() {
@@ -200,7 +957,7 @@ function Statement() {
     <section className="statement section-pad" id="manifesto">
       <div className="nexus-top">
         <div className="nexus-head-left">
-          <span className="micro">05 / CORE ARCHITECTURE & MANIFESTO</span>
+          <span className="micro">06 / CORE ARCHITECTURE & MANIFESTO</span>
           <span className="nexus-subhead">ENGINEERED FOR THE REAL WORLD</span>
         </div>
         <div className="nexus-telemetry">
@@ -397,7 +1154,12 @@ function Statement() {
   )
 }
 
-function ContactForm() {
+function ContactForm({
+  onCopyEmail, onCopyPhone
+}: {
+  onCopyEmail: () => void;
+  onCopyPhone: () => void;
+}) {
   const [sent, setSent] = useState(false)
   const [error, setError] = useState('')
   const [sending, setSending] = useState(false)
@@ -415,19 +1177,20 @@ function ContactForm() {
   }
 
   const submit = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault(); setError('')
+    event.preventDefault()
+    setError('')
     const form = event.currentTarget
     const values = new FormData(form)
     const errors: Record<string, string> = {}
     const name = String(values.get('name') || '').trim()
     const email = String(values.get('email') || '').trim()
-    const reason = String(values.get('reason') || '').trim() || 'General inquiry'
+    const reason = String(values.get('reason') || '').trim() || 'Recruiter inquiry'
     const message = String(values.get('message') || '').trim()
 
     if (!name) errors.name = 'Please enter your name.'
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) errors.email = 'Enter a valid email address.'
     if (phone && !/^\d{7,15}$/.test(phone.replace(/\D/g, ''))) {
-      errors.phone = 'Enter 10 digits after +91.'
+      errors.phone = 'Enter valid phone digits.'
     }
     if (message.length < 5) errors.message = 'Please enter a message (at least 5 characters).'
 
@@ -437,9 +1200,12 @@ function ContactForm() {
     const key = import.meta.env.VITE_WEB3FORMS_KEY || '1b3ba267-8158-4295-bc2c-047e4bb0ccc5'
     if (key) {
       setSending(true)
-      values.set('name', name); values.set('email', email); values.set('message', message)
+      values.set('name', name)
+      values.set('email', email)
+      values.set('message', message)
       values.set('phone', phone ? `+91 ${phone}` : '')
-      values.set('access_key', key); values.set('subject', `Portfolio contact — ${name} (${reason})`)
+      values.set('access_key', key)
+      values.set('subject', `Portfolio / Recruiter Contact — ${name} (${reason})`)
       try {
         const response = await fetch('https://api.web3forms.com/submit', { method: 'POST', body: values })
         const result = await response.json()
@@ -466,18 +1232,210 @@ function ContactForm() {
     form.reset()
     setPhone('')
   }
-  const errorFor = (field: string) => fieldErrors[field] && <span className="field-error" id={`${field}-error`} role="alert">{fieldErrors[field]}</span>
-  return <section className="contact section-pad" id="contact"><ContactSky/><div className="contact-card"><span className="micro">HAVE SOMETHING IN MIND?</span><h2>LET’S BUILD<br/>SOMETHING<span>.</span></h2><p className="contact-direct">Or just write: <a href={`mailto:${site.email}`}>{site.email}</a></p>{sent ? <div className="success-state" role="status"><p style={{ margin: 0 }}><strong>Thank you!</strong> Your message has been prepared & sent.</p><p style={{ margin: '8px 0 0', fontSize: '11px', color: '#b5b1aa' }}>I'll reply soon. You can also email directly at <a href={`mailto:${site.email}`} style={{ color: 'var(--red)', textDecoration: 'underline' }}>{site.email}</a>.</p><button type="button" className="button button-outline" style={{ marginTop: '14px', fontSize: '9px', minHeight: '32px', color: 'white', borderColor: '#666' }} onClick={() => setSent(false)}>SEND ANOTHER MESSAGE</button></div> : <form onSubmit={submit} noValidate>
-    <input className="botcheck" type="checkbox" name="botcheck" tabIndex={-1} autoComplete="off" aria-hidden="true" />
-    <div className="form-pair"><label htmlFor="contact-name">YOUR NAME<input id="contact-name" name="name" autoComplete="name" required onInput={() => clearFieldError('name')} aria-invalid={Boolean(fieldErrors.name)} aria-describedby={fieldErrors.name ? 'name-error' : undefined} placeholder="Name"/>{errorFor('name')}</label><label htmlFor="contact-email">EMAIL ADDRESS<input id="contact-email" type="email" name="email" autoComplete="email" required onInput={() => clearFieldError('email')} aria-invalid={Boolean(fieldErrors.email)} aria-describedby={fieldErrors.email ? 'email-error' : undefined} placeholder="you@example.com"/>{errorFor('email')}</label></div>
-    <div className="form-pair"><label htmlFor="contact-phone">PHONE <span className="phone-field"><span>+91</span><input id="contact-phone" type="tel" inputMode="numeric" name="phone" autoComplete="tel-national" value={phone} onChange={event => { setPhone(event.target.value.replace(/\D/g, '').slice(0, 10)); clearFieldError('phone') }} aria-invalid={Boolean(fieldErrors.phone)} aria-describedby={fieldErrors.phone ? 'phone-error' : undefined} placeholder="9876543210"/></span>{errorFor('phone')}</label><label htmlFor="contact-reason">REASON<select id="contact-reason" name="reason" defaultValue="" onChange={() => clearFieldError('reason')} aria-invalid={Boolean(fieldErrors.reason)} aria-describedby={fieldErrors.reason ? 'reason-error' : undefined}><option value="">Select reason (optional)</option>{['Full-time role', 'Internship', 'Freelance project', 'Collaboration', 'Other'].map(x => <option key={x} value={x}>{x}</option>)}</select>{errorFor('reason')}</label></div>
-    <label htmlFor="contact-message">MESSAGE<textarea id="contact-message" name="message" rows={2} required onInput={() => clearFieldError('message')} aria-invalid={Boolean(fieldErrors.message)} aria-describedby={fieldErrors.message ? 'message-error' : undefined} placeholder="A little about what you have in mind…"/>{errorFor('message')}</label>
-    <button type="submit" className="button button-light" disabled={sending}>{sending ? 'SENDING…' : 'SEND DETAILS'} <ArrowRight/></button><p className="form-note" aria-live="polite">{error ? <>{error} <a href={`mailto:${site.email}`}>Email me instead</a>.</> : 'No spam. A real reply, usually the same day.'}</p>
-  </form>}</div></section>
+
+  const errorFor = (field: string) =>
+    fieldErrors[field] && (
+      <span className="field-error" id={`${field}-error`} role="alert">
+        {fieldErrors[field]}
+      </span>
+    )
+
+  return (
+    <section className="contact section-pad" id="contact">
+      <ContactSky />
+      <div className="contact-card">
+        <span className="micro">RECRUITERS & COLLABORATORS</span>
+        <h2>
+          LET’S CONNECT<br />
+          & BUILD<span>.</span>
+        </h2>
+
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10, margin: '14px 0 24px', alignItems: 'center' }}>
+          <button type="button" className="modal-btn" onClick={onCopyEmail}>
+            <Mail size={13} color="var(--red)" />
+            <span>{site.email}</span>
+            <Copy size={11} style={{ marginLeft: 4 }} />
+          </button>
+          <button type="button" className="modal-btn" onClick={onCopyPhone}>
+            <Phone size={13} color="#10b981" />
+            <span>{site.phone}</span>
+            <Copy size={11} style={{ marginLeft: 4 }} />
+          </button>
+        </div>
+
+        {sent ? (
+          <div className="success-state" role="status">
+            <p style={{ margin: 0 }}>
+              <strong>Thank you!</strong> Your message has been received.
+            </p>
+            <p style={{ margin: '8px 0 0', fontSize: '11px', color: '#b5b1aa' }}>
+              I respond promptly to recruiter inquiries, usually within 12 hours. You can also reach me directly at{' '}
+              <a href={`mailto:${site.email}`} style={{ color: 'var(--red)', textDecoration: 'underline' }}>
+                {site.email}
+              </a>{' '}
+              or{' '}
+              <a href={`tel:${site.phone}`} style={{ color: '#fff', textDecoration: 'underline' }}>
+                {site.phone}
+              </a>.
+            </p>
+            <button
+              type="button"
+              className="button button-outline"
+              style={{ marginTop: '14px', fontSize: '9px', minHeight: '32px', color: 'white', borderColor: '#666' }}
+              onClick={() => setSent(false)}
+            >
+              SEND ANOTHER MESSAGE
+            </button>
+          </div>
+        ) : (
+          <form onSubmit={submit} noValidate>
+            <input className="botcheck" type="checkbox" name="botcheck" tabIndex={-1} autoComplete="off" aria-hidden="true" />
+            <div className="form-pair">
+              <label htmlFor="contact-name">
+                YOUR NAME
+                <input
+                  id="contact-name"
+                  name="name"
+                  autoComplete="name"
+                  required
+                  onInput={() => clearFieldError('name')}
+                  aria-invalid={Boolean(fieldErrors.name)}
+                  aria-describedby={fieldErrors.name ? 'name-error' : undefined}
+                  placeholder="Recruiter or Engineering Manager name"
+                />
+                {errorFor('name')}
+              </label>
+              <label htmlFor="contact-email">
+                WORK EMAIL
+                <input
+                  id="contact-email"
+                  type="email"
+                  name="email"
+                  autoComplete="email"
+                  required
+                  onInput={() => clearFieldError('email')}
+                  aria-invalid={Boolean(fieldErrors.email)}
+                  aria-describedby={fieldErrors.email ? 'email-error' : undefined}
+                  placeholder="name@company.com"
+                />
+                {errorFor('email')}
+              </label>
+            </div>
+            <div className="form-pair">
+              <label htmlFor="contact-phone">
+                PHONE{' '}
+                <span className="phone-field">
+                  <span>+91</span>
+                  <input
+                    id="contact-phone"
+                    type="tel"
+                    inputMode="numeric"
+                    name="phone"
+                    autoComplete="tel-national"
+                    value={phone}
+                    onChange={event => {
+                      setPhone(event.target.value.replace(/\D/g, '').slice(0, 10))
+                      clearFieldError('phone')
+                    }}
+                    aria-invalid={Boolean(fieldErrors.phone)}
+                    aria-describedby={fieldErrors.phone ? 'phone-error' : undefined}
+                    placeholder="9876543210"
+                  />
+                </span>
+                {errorFor('phone')}
+              </label>
+              <label htmlFor="contact-reason">
+                OPPORTUNITY TYPE
+                <select
+                  id="contact-reason"
+                  name="reason"
+                  defaultValue=""
+                  onChange={() => clearFieldError('reason')}
+                  aria-invalid={Boolean(fieldErrors.reason)}
+                  aria-describedby={fieldErrors.reason ? 'reason-error' : undefined}
+                >
+                  <option value="">Select opportunity (optional)</option>
+                  {[
+                    'Full-time AI/ML Role',
+                    'Summer / Fall Internship',
+                    'Full-Stack / Software Engineering Role',
+                    'Backend / Java Role',
+                    'Technical Interview Request',
+                    'Other Inquiry'
+                  ].map(x => (
+                    <option key={x} value={x}>{x}</option>
+                  ))}
+                </select>
+                {errorFor('reason')}
+              </label>
+            </div>
+            <label htmlFor="contact-message">
+              MESSAGE / ROLE DETAILS
+              <textarea
+                id="contact-message"
+                name="message"
+                rows={2}
+                required
+                onInput={() => clearFieldError('message')}
+                aria-invalid={Boolean(fieldErrors.message)}
+                aria-describedby={fieldErrors.message ? 'message-error' : undefined}
+                placeholder="Share role description, team context, or interview details…"
+              />
+              {errorFor('message')}
+            </label>
+            <button type="submit" className="button button-light" disabled={sending}>
+              {sending ? 'SENDING…' : 'SEND DETAILS'} <ArrowRight />
+            </button>
+            <p className="form-note" aria-live="polite">
+              {error ? (
+                <>
+                  {error} <a href={`mailto:${site.email}`}>Email me instead</a>.
+                </>
+              ) : (
+                'Response guaranteed within 12 hours. Direct reply straight to your inbox.'
+              )}
+            </p>
+          </form>
+        )}
+      </div>
+    </section>
+  )
 }
 
-function Footer() {
-  return <footer className="footer section-pad"><div className="footer-top"><p className="micro">FROM CONCEPT TO CODE TO DEPLOYMENT.</p><div className="footer-links">{[['EMAIL', `mailto:${site.email}`], ['GITHUB', site.links.github], ['LINKEDIN', site.links.linkedin], ['LEETCODE', site.links.leetcode]].map(([label, href]) => <a key={label} href={href} target={href.startsWith('http') ? '_blank' : undefined} rel="noreferrer">{label}<ArrowUpRight/></a>)}{site.profile.resume && <a className="footer-resume" href={asset(site.profile.resume)} target="_blank" rel="noreferrer">DOWNLOAD RESUME <ArrowUpRight/></a>}</div></div><div className="footer-mark">TANMAY.JAIN<sup>®</sup></div><div className="footer-bottom"><span>© 2026 TANMAY JAIN. ALL RIGHTS RESERVED.</span><a href="#home">BACK TO TOP ↑</a><span>MADE IN JAIPUR, INDIA</span></div></footer>
+function Footer({ onOpenResume }: { onOpenResume: () => void }) {
+  return (
+    <footer className="footer section-pad">
+      <div className="footer-top">
+        <p className="micro">
+          TANMAY JAIN · B.TECH CSE (AI & ML) · JECRC UNIVERSITY · 9.04 CGPA
+        </p>
+        <div className="footer-links">
+          {[
+            ['EMAIL', `mailto:${site.email}`],
+            ['GITHUB', site.links.github],
+            ['LINKEDIN', site.links.linkedin],
+            ['LEETCODE', site.links.leetcode],
+          ].map(([label, href]) => (
+            <a key={label} href={href} target={href.startsWith('http') ? '_blank' : undefined} rel="noreferrer">
+              {label}
+              <ArrowUpRight />
+            </a>
+          ))}
+          <button type="button" className="footer-resume button button-outline" onClick={onOpenResume}>
+            PREVIEW RESUME (PDF) <ArrowUpRight />
+          </button>
+        </div>
+      </div>
+      <div className="footer-mark">
+        TANMAY.JAIN<sup>®</sup>
+      </div>
+      <div className="footer-bottom">
+        <span>© 2026 TANMAY JAIN. ALL RIGHTS RESERVED.</span>
+        <a href="#home">BACK TO TOP ↑</a>
+        <span>JAIPUR, RAJASTHAN, INDIA</span>
+      </div>
+    </footer>
+  )
 }
 
 function ProjectDetail() {
@@ -485,35 +1443,187 @@ function ProjectDetail() {
   const project = site.projects.find(p => p.name.toLowerCase().replace(/\s+/g, '-') === slug)
   const navigate = useNavigate()
   const index = project ? site.projects.indexOf(project) : -1
-  const move = (offset: number) => { const next = site.projects[(index + offset + site.projects.length) % site.projects.length]; navigate(`/project/${next.name.toLowerCase().replace(/\s+/g, '-')}`) }
-  return <div className="detail-overlay"><button className="button button-outline" onClick={() => navigate('/')}>← BACK TO PORTFOLIO</button>{project ? <><span className="micro">PROJECT / {project.type}</span><h1>{project.name}</h1><ResponsiveImage path={project.image} alt={project.imageAlt} width={1600} height={1000} className="detail-cover" sizes="(max-width: 1000px) 90vw, 1000px"/><p>{project.description}</p><p className="micro">{project.stack}</p><div className="detail-nav"><button className="button button-outline" onClick={() => move(-1)}>← PREVIOUS</button><button className="button button-outline" onClick={() => move(1)}>NEXT PROJECT →</button></div></> : <h1>Project not found.</h1>}</div>
+  const move = (offset: number) => {
+    const next = site.projects[(index + offset + site.projects.length) % site.projects.length]
+    navigate(`/project/${next.name.toLowerCase().replace(/\s+/g, '-')}`)
+  }
+
+  return (
+    <div className="detail-overlay">
+      <button className="button button-outline" onClick={() => navigate('/')}>
+        ← BACK TO PORTFOLIO
+      </button>
+      {project ? (
+        <>
+          <span className="micro">PROJECT / {project.type}</span>
+          <h1>{project.name}</h1>
+          <ResponsiveImage
+            path={project.image}
+            alt={project.imageAlt}
+            width={1600}
+            height={1000}
+            className="detail-cover"
+            sizes="(max-width: 1000px) 90vw, 1000px"
+          />
+          <p>{project.description}</p>
+          <div style={{ margin: '14px 0', display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+            {project.repoUrl && (
+              <a className="button button-outline" href={project.repoUrl} target="_blank" rel="noreferrer">
+                VIEW SOURCE CODE <ArrowUpRight />
+              </a>
+            )}
+            {project.liveUrl && (
+              <a className="button button-outline" href={project.liveUrl} target="_blank" rel="noreferrer">
+                OPEN LIVE APPLICATION <ArrowUpRight />
+              </a>
+            )}
+          </div>
+          <p className="micro">{project.stack}</p>
+          <div className="detail-nav">
+            <button className="button button-outline" onClick={() => move(-1)}>
+              ← PREVIOUS
+            </button>
+            <button className="button button-outline" onClick={() => move(1)}>
+              NEXT PROJECT →
+            </button>
+          </div>
+        </>
+      ) : (
+        <h1>Project not found.</h1>
+      )}
+    </div>
+  )
 }
 
 function Portfolio() {
+  const [resumeOpen, setResumeOpen] = useState(false)
+  const [recruiterOpen, setRecruiterOpen] = useState(false)
+  const [toastMsg, setToastMsg] = useState<string | null>(null)
+
+  const showToast = (msg: string) => {
+    setToastMsg(msg)
+  }
+
+  const copyEmail = () => {
+    navigator.clipboard.writeText(site.email)
+    showToast(`✓ Copied email: ${site.email}`)
+  }
+
+  const copyPhone = () => {
+    navigator.clipboard.writeText(site.phone)
+    showToast(`✓ Copied phone: ${site.phone}`)
+  }
+
   useEffect(() => {
     if (matchMedia('(prefers-reduced-motion: reduce)').matches) return
     const lenis = new Lenis({ duration: 1.15, smoothWheel: true })
     lenis.on('scroll', ScrollTrigger.update)
     const ticker = (time: number) => lenis.raf(time * 1000)
-    gsap.ticker.add(ticker); gsap.ticker.lagSmoothing(0)
+    gsap.ticker.add(ticker)
+    gsap.ticker.lagSmoothing(0)
     const ctx = gsap.context(() => {
-      gsap.utils.toArray<HTMLElement>('.section-title').forEach(el => gsap.from(el, { y: 45, opacity: 0, duration: 1, ease: 'power3.out', scrollTrigger: { trigger: el, start: 'top 88%' } }))
-      gsap.to('.hero-image', { yPercent: 9, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true } })
-      gsap.fromTo('.nexus-radar', { scale: .92, rotate: -5 }, { scale: 1.04, rotate: 5, ease: 'none', scrollTrigger: { trigger: '.statement', start: 'top 85%', end: 'bottom 15%', scrub: 1 } })
+      gsap.utils.toArray<HTMLElement>('.section-title').forEach(el =>
+        gsap.from(el, {
+          y: 45,
+          opacity: 0,
+          duration: 1,
+          ease: 'power3.out',
+          scrollTrigger: { trigger: el, start: 'top 88%' },
+        })
+      )
+      gsap.to('.hero-image', {
+        yPercent: 9,
+        ease: 'none',
+        scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true },
+      })
+      gsap.fromTo(
+        '.nexus-radar',
+        { scale: 0.92, rotate: -5 },
+        {
+          scale: 1.04,
+          rotate: 5,
+          ease: 'none',
+          scrollTrigger: { trigger: '.statement', start: 'top 85%', end: 'bottom 15%', scrub: 1 },
+        }
+      )
     })
-    return () => { ctx.revert(); gsap.ticker.remove(ticker); lenis.destroy() }
+    return () => {
+      ctx.revert()
+      gsap.ticker.remove(ticker)
+      lenis.destroy()
+    }
   }, [])
+
   useEffect(() => {
     if (matchMedia('(prefers-reduced-motion: reduce)').matches || matchMedia('(pointer: coarse)').matches) return
     const cursor = document.querySelector<HTMLElement>('.custom-cursor')
     if (!cursor) return
-    const move = (event: PointerEvent) => { cursor.style.left = `${event.clientX}px`; cursor.style.top = `${event.clientY}px` }
-    const over = (event: PointerEvent) => { if ((event.target as HTMLElement).closest('a,button')) cursor.classList.add('cursor-hover') }
-    const out = (event: PointerEvent) => { if ((event.target as HTMLElement).closest('a,button')) cursor.classList.remove('cursor-hover') }
-    window.addEventListener('pointermove', move); document.addEventListener('pointerover', over); document.addEventListener('pointerout', out)
-    return () => { window.removeEventListener('pointermove', move); document.removeEventListener('pointerover', over); document.removeEventListener('pointerout', out) }
+    const move = (event: PointerEvent) => {
+      cursor.style.left = `${event.clientX}px`
+      cursor.style.top = `${event.clientY}px`
+    }
+    const over = (event: PointerEvent) => {
+      if ((event.target as HTMLElement).closest('a,button')) cursor.classList.add('cursor-hover')
+    }
+    const out = (event: PointerEvent) => {
+      if ((event.target as HTMLElement).closest('a,button')) cursor.classList.remove('cursor-hover')
+    }
+    window.addEventListener('pointermove', move)
+    document.addEventListener('pointerover', over)
+    document.addEventListener('pointerout', out)
+    return () => {
+      window.removeEventListener('pointermove', move)
+      document.removeEventListener('pointerover', over)
+      document.removeEventListener('pointerout', out)
+    }
   }, [])
-  return <><Preloader/><Header/><main><Hero/><About/><StackMarquee/><Projects/><Lab/><Skillset/><Statement/><ContactForm/></main><Footer/><a className="custom-cursor" href="#home" aria-label="Back to top">↑</a></>
+
+  return (
+    <>
+      <Preloader />
+      <Header
+        onOpenRecruiter={() => setRecruiterOpen(true)}
+        onOpenResume={() => setResumeOpen(true)}
+        onCopyEmail={copyEmail}
+      />
+      <main>
+        <Hero
+          onOpenRecruiter={() => setRecruiterOpen(true)}
+          onOpenResume={() => setResumeOpen(true)}
+          onCopyEmail={copyEmail}
+        />
+        <About />
+        <StackMarquee />
+        <Projects />
+        <Credentials />
+        <Lab />
+        <Skillset />
+        <Statement />
+        <ContactForm onCopyEmail={copyEmail} onCopyPhone={copyPhone} />
+      </main>
+      <Footer onOpenResume={() => setResumeOpen(true)} />
+      <ResumeModal open={resumeOpen} onClose={() => setResumeOpen(false)} />
+      <RecruiterDossierModal
+        open={recruiterOpen}
+        onClose={() => setRecruiterOpen(false)}
+        onOpenResume={() => setResumeOpen(true)}
+        onCopyEmail={copyEmail}
+        onCopyPhone={copyPhone}
+      />
+      <Toast message={toastMsg} onClear={() => setToastMsg(null)} />
+      <a className="custom-cursor" href="#home" aria-label="Back to top">
+        ↑
+      </a>
+    </>
+  )
 }
 
-export default function App() { return <Routes><Route path="/" element={<Portfolio/>}/><Route path="/project/:slug" element={<><Portfolio/><ProjectDetail/></>}/><Route path="*" element={<Portfolio/>}/></Routes> }
+export default function App() {
+  return (
+    <Routes>
+      <Route path="/" element={<Portfolio />} />
+      <Route path="/project/:slug" element={<><Portfolio /><ProjectDetail /></>} />
+      <Route path="*" element={<Portfolio />} />
+    </Routes>
+  )
+}
